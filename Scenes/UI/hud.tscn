@@ -3,7 +3,26 @@
 [node name="Hud" type="CanvasLayer"]
 
 [node name="Panel" type="Panel" parent="."]
-offset_left = 510.0
-offset_top = 81.0
-offset_right = 1101.0
-offset_bottom = 505.0
+offset_left = 611.0
+offset_top = 133.0
+offset_right = 1112.0
+offset_bottom = 581.0
+
+[node name="AnswersButton" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 122.0
+offset_right = 479.0
+offset_bottom = 421.0
+
+[node name="Button" type="Button" parent="Panel/AnswersButton"]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="Panel/AnswersButton"]
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="Panel/AnswersButton"]
+layout_mode = 2
+
+[node name="Button4" type="Button" parent="Panel/AnswersButton"]
+layout_mode = 2
