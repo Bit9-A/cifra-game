@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjjkll71ijggr"]
+[gd_scene load_steps=4 format=3 uid="uid://cjjkll71ijggr"]
 
 [ext_resource type="Texture2D" uid="uid://bvgaymsf7ilmw" path="res://Assets/sprites/cars/policiaS.png" id="1_rbond"]
+[ext_resource type="Script" path="res://Scripts/policia.gd" id="2_xxxx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rbond"]
 size = Vector2(244, 70)
 
 [node name="Policia" type="CharacterBody2D"]
+script = ExtResource("2_xxxx")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(1, 0)

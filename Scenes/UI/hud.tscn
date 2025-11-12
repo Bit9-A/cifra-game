@@ -1,28 +1,77 @@
-[gd_scene format=3 uid="uid://oqwx76ituf1v"]
+[gd_scene load_steps=3 format=3 uid="uid://oqwx76ituf1v"]
+
+[ext_resource type="Script" uid="uid://dfoq7j8pvqgtc" path="res://Scripts/hud.gd" id="1_sprlj"]
+[ext_resource type="FontFile" uid="uid://bfmsaoba6bqb" path="res://Assets/fonts/PixelAE-Regular.ttf" id="2_ny26j"]
 
 [node name="Hud" type="CanvasLayer"]
+script = ExtResource("1_sprlj")
 
 [node name="Panel" type="Panel" parent="."]
-offset_left = 611.0
-offset_top = 133.0
-offset_right = 1112.0
-offset_bottom = 581.0
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 320.0
+offset_top = 68.0
+offset_right = 600.0
+offset_bottom = 367.0
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+modulate = Color(0, 0, 0, 0.49803922)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
 
 [node name="AnswersButton" type="VBoxContainer" parent="Panel"]
-layout_mode = 0
-offset_left = 23.0
-offset_top = 122.0
-offset_right = 479.0
-offset_bottom = 421.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 139.0
+offset_bottom = -7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
 
 [node name="Button" type="Button" parent="Panel/AnswersButton"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ny26j")
+theme_override_font_sizes/font_size = 10
+alignment = 0
+autowrap_mode = 3
 
 [node name="Button2" type="Button" parent="Panel/AnswersButton"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ny26j")
+theme_override_font_sizes/font_size = 10
+alignment = 0
+autowrap_mode = 3
 
 [node name="Button3" type="Button" parent="Panel/AnswersButton"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ny26j")
+theme_override_font_sizes/font_size = 10
+alignment = 0
+autowrap_mode = 3
 
 [node name="Button4" type="Button" parent="Panel/AnswersButton"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ny26j")
+theme_override_font_sizes/font_size = 10
+alignment = 0
+autowrap_mode = 3
+
+[node name="Text" type="RichTextLabel" parent="Panel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 14.0
+offset_right = 264.0
+offset_bottom = 119.0
+
+[node name="TimeLabel" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -55.0
+offset_right = 277.0
+offset_bottom = -21.0
