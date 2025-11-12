@@ -4,13 +4,16 @@ extends CanvasLayer
 @onready var answer_buttons_container: Control = get_node("Panel/AnswersButton")
 @onready var answer_buttons: Array[Button] = []
 @onready var time_label: Label = get_node("Panel/TimeLabel") # Asumiendo que tienes un Label para el tiempo
+@onready var score_label: Label = get_node("Panel/Score") # Asumiendo que tienes un Label para el Score
 
 var questions_data: Dictionary
 var current_question_index: int = -1
 var current_question_data: Dictionary
+var answer_delay_time: float = 1.5 # Tiempo de retardo en segundos
 
 signal answer_selected(selected_answer_index: int)
 signal request_current_question() # Señal para que el Level pida la pregunta actual
+signal question_loaded() # Nueva señal para indicar que una nueva pregunta ha sido cargada
 
 func _ready() -> void:
 	print("HUD: _ready() llamado.")
@@ -77,20 +80,28 @@ func display_question(question_obj: Dictionary) -> void:
 		return
 	question_label.text = question_obj["question"]
 
-	var answers_to_display: Array = []
+	var answers_to_display: Array[String] = []
 	if question_obj.has("type"):
 		var question_type = question_obj["type"]
 		if question_type == "true_false":
 			answers_to_display = ["Verdadero", "Falso"]
-		elif question_type == "single_choice" and question_obj.has("answers") and question_obj["answers"] is Array:
-			answers_to_display = question_obj["answers"]
-		elif question_type == "percentage_choice" and question_obj.has("answers") and question_obj["answers"] is Array:
-			# Para percentage_choice, extraemos solo el texto de las respuestas
-			for ans_dict in question_obj["answers"]:
-				if ans_dict is Dictionary and ans_dict.has("text"):
-					answers_to_display.append(ans_dict["text"])
-				else:
-					answers_to_display.append("Respuesta inválida")
+		elif question_type == "single_choice":
+			if question_obj.has("answers") and question_obj["answers"] is Array:
+				# Asegurarnos de convertir todos los elementos a String para evitar errores de tipo
+				for ans in question_obj["answers"]:
+					answers_to_display.append(str(ans))
+			else:
+				push_error("HUD: single_choice sin 'answers' o 'answers' no es Array en display_question.")
+		elif question_type == "percentage_choice":
+			if question_obj.has("answers") and question_obj["answers"] is Array:
+				# Para percentage_choice, extraemos solo el texto de las respuestas
+				for ans_dict in question_obj["answers"]:
+					if ans_dict is Dictionary and ans_dict.has("text"):
+						answers_to_display.append(str(ans_dict["text"]))
+					else:
+						answers_to_display.append("Respuesta inválida")
+			else:
+				push_error("HUD: percentage_choice sin 'answers' o 'answers' no es Array en display_question.")
 		else:
 			push_error("HUD: Tipo de pregunta desconocido o respuestas mal formadas para display_question: ", question_type)
 	else:
@@ -106,7 +117,27 @@ func display_question(question_obj: Dictionary) -> void:
 			answer_buttons[i].hide()
 
 func on_answer_button_pressed(index: int) -> void:
+	# Deshabilitar todos los botones para evitar múltiples selecciones
+	for button in answer_buttons:
+		button.disabled = true
 	answer_selected.emit(index) # Emitir la señal con el índice de la respuesta
+
+func process_answer_feedback(is_correct: bool, selected_index: int) -> void:
+	if selected_index >= 0 and selected_index < answer_buttons.size():
+		var selected_button = answer_buttons[selected_index]
+		if is_correct:
+			selected_button.modulate = Color.GREEN
+		else:
+			selected_button.modulate = Color.RED
+	
+	await get_tree().create_timer(answer_delay_time).timeout
+	
+	# Restablecer colores y habilitar botones
+	for button in answer_buttons:
+		button.modulate = Color.WHITE # Restablecer el color a blanco (o el color original)
+		button.disabled = false
+	
+	load_random_question() # Cargar la siguiente pregunta después del retardo
 
 func get_current_question_data() -> Dictionary:
 	if current_question_data:
@@ -124,6 +155,12 @@ func get_current_question_data() -> Dictionary:
 				if not data_to_return.has("answers") or not (data_to_return["answers"] is Array):
 					push_error("HUD: Pregunta single_choice mal formada: falta 'answers' o no es un Array.")
 					data_to_return["answers"] = []
+				else:
+					# Convertir todos los elementos a String para mantener Array[String]
+					var str_answers: Array[String] = []
+					for a in data_to_return["answers"]:
+						str_answers.append(str(a))
+					data_to_return["answers"] = str_answers
 			elif question_type == "percentage_choice":
 				# Para percentage_choice, las respuestas son un array de diccionarios con "text"
 				# Asegurarse de que la clave 'answers' exista y sea un Array
@@ -150,6 +187,14 @@ func get_current_question_data() -> Dictionary:
 func _on_level_time_updated(new_time: float) -> void:
 	time_label.text = "Tiempo: %d" % int(new_time)
 
+func update_score_display(answered_count: int, total_to_win: int) -> void:
+	if score_label:
+		score_label.text = "Preguntas: %d/%d" % [answered_count, total_to_win]
+
 func _on_level_game_over_signal() -> void:
 	time_label.text = "¡Game Over!"
 	# Aquí puedes añadir más lógica para la pantalla de Game Over en el HUD
+
+func _on_level_game_won_signal() -> void:
+	time_label.text = "¡Has Ganado!"
+	# Aquí puedes añadir más lógica para la pantalla de victoria en el HUD
