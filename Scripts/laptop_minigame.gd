@@ -5,10 +5,13 @@ extends CanvasLayer
 @onready var submit_button: Button = get_node("Panel/SubmitButton")
 @onready var feedback_label: Label = get_node("Panel/FeedbackLabel")
 @onready var timer: Timer = get_node("Panel/Timer")
+@onready var attempt_label: Label = get_node_or_null("Panel/AttemptLabel") # Optional: muestra Intento X/5
 
 @export var minigame_time_limit: float = 10.0 # Tiempo para completar el minijuego
 @export var time_reward_on_success: float = 10.0
 @export var time_penalty_on_fail: float = 7.0
+
+@export var auto_start: bool = false # Si se instancia en escena, no iniciar automáticamente a menos que sea true
 
 @export var attempts_required: int = 5 # Número de palabras/rounds que hay que completar dentro del minijuego
 
@@ -27,7 +30,9 @@ func _ready() -> void:
 	timer.wait_time = minigame_time_limit
 	
 	load_words_data("res://Data/Words.json")
-	start_minigame()
+	# start_minigame se llamará explícitamente cuando se active el minijuego desde Level
+	if auto_start:
+		start_minigame()
 
 	# Permitir enviar la respuesta con Enter (conectar la señal disponible según la versión de Godot)
 	if guess_input and guess_input.has_signal("text_entered"):
@@ -75,6 +80,10 @@ func start_next_attempt() -> void:
 	word_display_label.text = hidden_word_display
 	guess_input.text = ""
 	feedback_label.text = ""
+	# Actualizar contador visual si existe
+	if attempt_label:
+		attempt_label.visible = true
+		attempt_label.text = "Intento %d/%d" % [attempts_done + 1, attempts_required]
 	guess_input.editable = true
 	submit_button.disabled = false
 	timer.start()

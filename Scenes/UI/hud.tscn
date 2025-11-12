@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://oqwx76ituf1v"]
+[gd_scene load_steps=4 format=3 uid="uid://oqwx76ituf1v"]
 
 [ext_resource type="Script" uid="uid://dfoq7j8pvqgtc" path="res://Scripts/hud.gd" id="1_sprlj"]
 [ext_resource type="FontFile" uid="uid://bfmsaoba6bqb" path="res://Assets/fonts/PixelAE-Regular.ttf" id="2_ny26j"]
+[ext_resource type="PackedScene" uid="uid://d20jo2ysdhhu2" path="res://Scenes/UI/LaptopMinigame.tscn" id="3_fdl0h"]
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_sprlj")
+
+[node name="LaptopMinigame" parent="." instance=ExtResource("3_fdl0h")]
 
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(0, 0, 0, 1)
@@ -13,8 +16,8 @@ offset_top = 68.0
 offset_right = 600.0
 offset_bottom = 367.0
 
-[node name="ColorRect" type="ColorRect" parent="Panel"]
-modulate = Color(0, 0, 0, 0.49803922)
+[node name="Panel2" type="ColorRect" parent="Panel"]
+self_modulate = Color(0, 0, 0, 0.654902)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="AnswersButton" type="VBoxContainer" parent="Panel"]
+[node name="AnswersButton" type="VBoxContainer" parent="Panel/Panel2"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,54 +37,54 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="Button" type="Button" parent="Panel/AnswersButton"]
+[node name="Button" type="Button" parent="Panel/Panel2/AnswersButton"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 10
 alignment = 0
 autowrap_mode = 3
 
-[node name="Button2" type="Button" parent="Panel/AnswersButton"]
+[node name="Button2" type="Button" parent="Panel/Panel2/AnswersButton"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 10
 alignment = 0
 autowrap_mode = 3
 
-[node name="Button3" type="Button" parent="Panel/AnswersButton"]
+[node name="Button3" type="Button" parent="Panel/Panel2/AnswersButton"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 10
 alignment = 0
 autowrap_mode = 3
 
-[node name="Button4" type="Button" parent="Panel/AnswersButton"]
+[node name="Button4" type="Button" parent="Panel/Panel2/AnswersButton"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 10
 alignment = 0
 autowrap_mode = 3
 
-[node name="Text" type="RichTextLabel" parent="Panel"]
+[node name="Text" type="RichTextLabel" parent="Panel/Panel2"]
 layout_mode = 0
 offset_left = 10.0
 offset_top = 14.0
 offset_right = 264.0
 offset_bottom = 119.0
 
-[node name="TimeLabel" type="Label" parent="Panel"]
+[node name="TimeLabel" type="Label" parent="Panel/Panel2"]
 layout_mode = 0
 offset_left = 2.0
 offset_top = -55.0
 offset_right = 277.0
 offset_bottom = -21.0
 
-[node name="Score" type="Label" parent="Panel"]
+[node name="Score" type="Label" parent="Panel/Panel2"]
 layout_mode = 0
 offset_left = -317.0
 offset_top = -65.0
 offset_right = -187.0
-offset_bottom = -42.0
+offset_bottom = -38.0
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 18
 text = "Score: 0/15"

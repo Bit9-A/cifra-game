@@ -1,10 +1,10 @@
 extends CanvasLayer
 
-@onready var question_label: RichTextLabel = get_node("Panel/Text")
-@onready var answer_buttons_container: Control = get_node("Panel/AnswersButton")
+@onready var question_label: RichTextLabel = get_node("Panel/Panel2/Text")
+@onready var answer_buttons_container: Control = get_node("Panel/Panel2/AnswersButton")
 @onready var answer_buttons: Array[Button] = []
-@onready var time_label: Label = get_node("Panel/TimeLabel") # Asumiendo que tienes un Label para el tiempo
-@onready var score_label: Label = get_node("Panel/Score") # Asumiendo que tienes un Label para el Score
+@onready var time_label: Label = get_node("Panel/Panel2/TimeLabel") # Asumiendo que tienes un Label para el tiempo
+@onready var score_label: Label = get_node("Panel/Panel2/Score") # Asumiendo que tienes un Label para el Score
 
 var questions_data: Dictionary
 var current_question_index: int = -1
@@ -38,6 +38,10 @@ func _ready() -> void:
 	load_questions_data("res://Data/Questions.json")
 	# La carga de la primera pregunta se moverá al Level para que el Level la controle.
 	# El Level llamará a load_random_question() en el HUD.
+	# Si la escena del HUD contiene un LaptopMinigame precolocado, mantenerlo oculto hasta activación
+	var preplaced_lm = get_node_or_null("LaptopMinigame")
+	if preplaced_lm:
+		preplaced_lm.visible = false
 
 func load_questions_data(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
@@ -198,3 +202,41 @@ func _on_level_game_over_signal() -> void:
 func _on_level_game_won_signal() -> void:
 	time_label.text = "¡Has Ganado!"
 	# Aquí puedes añadir más lógica para la pantalla de victoria en el HUD
+
+func hide_game_ui(fade: bool = true) -> void:
+	# Oculta el Panel que contiene las preguntas y botones (Panel/Panel2) si existe,
+	# y además oculta el texto de la pregunta y los botones por seguridad.
+	var panel2 = get_node_or_null("Panel/Panel2")
+	if panel2:
+		if fade and panel2 is CanvasItem:
+			# Tween the alpha to 0 then hide
+			panel2.modulate.a = panel2.modulate.a if panel2.modulate else 1.0
+			var tw = create_tween()
+			tw.tween_property(panel2, "modulate:a", 0.0, 0.25)
+			tw.connect("finished", Callable(self, "_on_panel2_hidden_finished"))
+		else:
+			panel2.visible = false
+	if question_label:
+		question_label.visible = false
+	for btn in answer_buttons:
+		btn.visible = false
+
+func _on_panel2_hidden_finished() -> void:
+	var panel2 = get_node_or_null("Panel/Panel2")
+	if panel2:
+		panel2.visible = false
+
+func show_game_ui(fade: bool = true) -> void:
+	# Muestra el Panel que contiene las preguntas y botones (Panel/Panel2) si existe,
+	# y además muestra el texto de la pregunta y los botones.
+	var panel2 = get_node_or_null("Panel/Panel2")
+	if panel2:
+		panel2.visible = true
+		if fade and panel2 is CanvasItem:
+			panel2.modulate.a = 0.0
+			var tw = create_tween()
+			tw.tween_property(panel2, "modulate:a", 1.0, 0.25)
+	if question_label:
+		question_label.visible = true
+	for btn in answer_buttons:
+		btn.visible = true

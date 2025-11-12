@@ -1,368 +1,146 @@
 {
   "questions": [
 	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Fraude electrónico detectado! Usó credenciales ajenas para realizar transacciones. ¿Cómo intenta justificarlo?",
-	  "answers": [
-		{
-		  "text": "A: No hubo “daño patrimonial” porque el dinero fue devuelto.",
-		  "success_chance": 65
-		},
-		{
-		  "text": "B: No suplanté identidad, solo “probé la vulnerabilidad” del sistema.",
-		  "success_chance": 40
-		},
-		{
-		  "text": "C: No se usaron medios electrónicos, sino copias impresas.",
-		  "success_chance": 15
-		},
-		{
-		  "text": "D: El sistema financiero no tenía medidas de seguridad adecuadas.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Intrusión detectada! Accedió a un servidor gubernamental sin autorización. ¿Cuál es su defensa?",
-	  "answers": [
-		{
-		  "text": "A: Solo “observé”, no modifiqué ni descargué datos.",
-		  "success_chance": 50
-		},
-		{
-		  "text": "B: El acceso fue accidental, causado por una falla de red.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: No estaba identificado el dominio como propiedad del Estado.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: El servidor no tenía contraseña, así que no hubo intrusión real.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Robo de identidad confirmado! Usó la cuenta de otra persona para enviar mensajes. ¿Cómo se defiende?",
-	  "answers": [
-		{
-		  "text": "A: Tenía permiso verbal del usuario, aunque no documentado.",
-		  "success_chance": 60
-		},
-		{
-		  "text": "B: No obtuve beneficio personal del acto.",
-		  "success_chance": 40
-		},
-		{
-		  "text": "C: Solo copié el perfil para un experimento social.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: No alteré información, solo la visualicé.",
-		  "success_chance": 15
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Propagación de código malicioso! Su software afectó múltiples redes. ¿Qué dice en su defensa?",
-	  "answers": [
-		{
-		  "text": "A: Era una herramienta de prueba sin intención de daño.",
-		  "success_chance": 55
-		},
-		{
-		  "text": "B: El virus se activó por error humano, no por diseño.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: Solo modifiqué archivos locales, no en línea.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: El daño fue causado por otros usuarios que copiaron mi código.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Alteración de base de datos! Cambió registros en un portal ciudadano. ¿Cómo justifica su acción?",
-	  "answers": [
-		{
-		  "text": "A: Corrigí errores del sistema para mejorar la precisión.",
-		  "success_chance": 60
-		},
-		{
-		  "text": "B: Fue una modificación temporal para probar la seguridad.",
-		  "success_chance": 45
-		},
-		{
-		  "text": "C: No hubo daño porque los datos eran públicos.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: El cambio fue sugerido por un tercero anónimo.",
-		  "success_chance": 15
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Posesión de software de ataque detectada! ¿Para qué las usaba?",
-	  "answers": [
-		{
-		  "text": "A: Con fines educativos y de auditoría ética.",
-		  "success_chance": 65
-		},
-		{
-		  "text": "B: Eran archivos de código abierto sin propósito dañino.",
-		  "success_chance": 45
-		},
-		{
-		  "text": "C: Nunca las ejecuté, solo las descargué por curiosidad.",
-		  "success_chance": 30
-		},
-		{
-		  "text": "D: No sabía que su uso estaba prohibido por ley.",
-		  "success_chance": 15
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Sabotaje al sistema energético! Su ataque afectó el suministro de datos críticos. ¿Cómo se justifica?",
-	  "answers": [
-		{
-		  "text": "A: Buscaba exponer vulnerabilidades para prevenir un ataque real.",
-		  "success_chance": 55
-		},
-		{
-		  "text": "B: No hubo intención de daño, fue un error de cálculo.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: El sistema ya presentaba fallos antes de mi intervención.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: La acción fue ordenada por un cliente sin informar su propósito.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Captura de mensajes detectada! Interfirió en una transmisión privada. ¿Qué alega?",
-	  "answers": [
-		{
-		  "text": "A: Solo intercepté paquetes de datos sin contenido legible.",
-		  "success_chance": 60
-		},
-		{
-		  "text": "B: Fue un monitoreo de red con fines académicos.",
-		  "success_chance": 40
-		},
-		{
-		  "text": "C: El emisor me dio consentimiento tácito por medio de una prueba.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: No sabía que el tráfico era privado.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Manipulación de evidencias! Se detectó que cambió archivos de registro. ¿Cuál es su excusa?",
-	  "answers": [
-		{
-		  "text": "A: Solo ajusté las fechas para mantener orden cronológico.",
-		  "success_chance": 50
-		},
-		{
-		  "text": "B: Los registros eran de mi propiedad, no del sistema judicial.",
-		  "success_chance": 40
-		},
-		{
-		  "text": "C: No borré información, solo la comprimí.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: No sabía que eran considerados evidencia digital.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Se infiltró en la base de datos del laboratorio nacional de ADN! ¿Qué pretendía?",
-	  "answers": [
-		{
-		  "text": "A: Probar la integridad del sistema de bioseguridad.",
-		  "success_chance": 50
-		},
-		{
-		  "text": "B: Solo busqué coincidencias familiares, no alteré datos.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: El archivo no estaba clasificado como confidencial.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: No usé virus informáticos, sino biológicos… (¡es broma!).",
-		  "success_chance": 5
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Su IA filtró documentos confidenciales por “voluntad propia”! ¿Qué alega?",
-	  "answers": [
-		{
-		  "text": "A: El responsable es el algoritmo, no el programador.",
-		  "success_chance": 65
-		},
-		{
-		  "text": "B: La IA actuó fuera de su entrenamiento.",
-		  "success_chance": 50
-		},
-		{ "text": "C: Fue un error ético, no legal.", "success_chance": 25 },
-		{
-		  "text": "D: Si tiene conciencia, debería ser juzgada, no yo.",
-		  "success_chance": 15
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Bloqueó el portal electoral durante 15 minutos! ¿Cómo lo defiende?",
-	  "answers": [
-		{
-		  "text": "A: Fue un test de carga mal programado.",
-		  "success_chance": 50
-		},
-		{
-		  "text": "B: Solo reenvié peticiones, no las originé.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: El servidor colapsó por mala infraestructura, no por mí.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: 15 minutos no son sabotaje, son mantenimiento social.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Ha alterado los registros de huellas digitales en el sistema penitenciario! ¿Qué tiene que decir?",
-	  "answers": [
-		{
-		  "text": "A: Fue una prueba de vulnerabilidad para mejorar la seguridad.",
-		  "success_chance": 60
-		},
-		{
-		  "text": "B: No cambié identidades, solo reorganicé los datos.",
-		  "success_chance": 40
-		},
-		{
-		  "text": "C: El sistema ya tenía inconsistencias antes de mi intervención.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: Técnicamente, las huellas no son “datos informáticos”.",
-		  "success_chance": 10
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Convenció a empleados para revelar contraseñas! ¿Cómo lo justifica?",
-	  "answers": [
-		{
-		  "text": "A: Fue un ejercicio de psicología aplicada, no un ataque.",
-		  "success_chance": 60
-		},
-		{
-		  "text": "B: Las contraseñas fueron reveladas voluntariamente.",
-		  "success_chance": 45
-		},
-		{
-		  "text": "C: Solo “simulé” ser un técnico, no me identifiqué falsamente.",
-		  "success_chance": 25
-		},
-		{
-		  "text": "D: No fue hacking, fue persuasión profesional.",
-		  "success_chance": 15
-		}
-	  ]
-	},
-	{
-	  "type": "percentage_choice",
-	  "question": "Agente: ¡Manipuló la señal de un satélite meteorológico! Provocó un caos en los sistemas de alerta. ¿Cómo se defiende?",
-	  "answers": [
-		{
-		  "text": "A: Era un test de precisión de transmisión, no sabotaje.",
-		  "success_chance": 55
-		},
-		{
-		  "text": "B: La interferencia fue mínima y sin daños permanentes.",
-		  "success_chance": 35
-		},
-		{
-		  "text": "C: El satélite no pertenece a Venezuela, no aplica la ley nacional.",
-		  "success_chance": 20
-		},
-		{
-		  "text": "D: ¡No fui yo! Fue el clima... literalmente.",
-		  "success_chance": 5
-		}
-	  ]
-	},
-	{
 	  "type": "single_choice",
-	  "question": "¿Qué órgano se encarga de investigar los delitos informáticos en Venezuela?",
+	  "question": "¿Qué se considera un delito informático?",
 	  "answers": [
-		"a) Ministerio de Comunicación",
-		"b) CICPC",
-		"c) SENIAT",
-        "d) CANTV"
+		"a) Usar una computadora para estudiar.",
+		"b) Acceder a información sin permiso.",
+		"c) Jugar videojuegos.",
+        "d) Hacer una llamada por Internet."
 	  ],
 	  "correct_answer_index": 1
 	},
 	{
 	  "type": "single_choice",
-	  "question": "¿Qué artículo de la ley sanciona el uso indebido de información confidencial obtenida ilícitamente?",
+	  "question": "¿Quién investiga los delitos informáticos en Venezuela?",
 	  "answers": [
-		"a) Artículo 14",
-		"b) Artículo 15",
-		"c) Artículo 18",
-        "d) Artículo 20"
+		"a) El CICPC.",
+		"b) El SENIAT.",
+		"c) El Ministerio de Educación.",
+        "d) El INTT."
+	  ],
+	  "correct_answer_index": 0
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Qué pasa si entras a un sistema sin permiso aunque no borres nada?",
+	  "answers": [
+		"a) No pasa nada.",
+		"b) Igual es un delito.",
+		"c) Solo si robas datos.",
+        "d) Si no hay testigos, no importa."
+	  ],
+	  "correct_answer_index": 1
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿La Ley Especial contra los Delitos Informáticos existe en Venezuela?",
+	  "answers": [
+		"a) No, solo en otros países.",
+		"b) Sí, desde 2001.",
+		"c) No, es una ley nueva.",
+        "d) Solo para empresas."
+	  ],
+	  "correct_answer_index": 1
+	},
+	{
+	  "type": "single_choice",
+	  "question": "Hacer o compartir un virus informático es delito.",
+	  "answers": ["a) Verdadero.", "b) Falso."],
+	  "correct_answer_index": 0
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Qué artículo castiga el uso no autorizado de información privada?",
+	  "answers": [
+		"a) Artículo 18.",
+		"b) Artículo 4.",
+		"c) Artículo 10.",
+        "d) Artículo 25."
+	  ],
+	  "correct_answer_index": 0
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Qué sucede si dañas un sistema informático por accidente?",
+	  "answers": [
+		"a) No se castiga.",
+		"b) Puede tener sanción si hubo negligencia.",
+		"c) Solo si fue con virus.",
+        "d) No hay ley para eso."
+	  ],
+	  "correct_answer_index": 1
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Cuál de estos ejemplos representa un acceso indebido?",
+	  "answers": [
+		"a) Usar tu propia cuenta.",
+		"b) Entrar al correo de otro sin permiso.",
+		"c) Leer noticias en Internet.",
+        "d) Instalar una app."
+	  ],
+	  "correct_answer_index": 1
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Qué órgano judicial aplica la ley de delitos informáticos?",
+	  "answers": [
+		"a) El CICPC.",
+		"b) Los tribunales penales.",
+		"c) El Ministerio del Trabajo.",
+        "d) El SENIAT."
+	  ],
+	  "correct_answer_index": 1
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Cuál es la pena aproximada por acceso indebido según la ley?",
+	  "answers": [
+		"a) Prisión de uno a cinco años.",
+		"b) Multa económica.",
+		"c) Trabajo comunitario.",
+        "d) Ninguna sanción."
+	  ],
+	  "correct_answer_index": 0
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Qué artículo sanciona la violación de la privacidad de las comunicaciones?",
+	  "answers": [
+		"a) Artículo 7.",
+		"b) Artículo 15.",
+		"c) Artículo 20.",
+        "d) Artículo 11."
 	  ],
 	  "correct_answer_index": 2
 	},
 	{
 	  "type": "single_choice",
-	  "question": "La acción de acceder a un sistema sin causar daño o alteración se tipifica como 'Acceso Indebido'. ¿Cuál es la pena?",
+	  "question": "Usar contraseñas ajenas sin permiso es un delito de...",
 	  "answers": [
-		"a) Prisión de dos a seis años.",
-		"b) Prisión de uno a cinco años.",
-		"c) Prisión de tres a siete años.",
-        "d) Prisión de cuatro a ocho años."
+		"a) Sabotaje.",
+		"b) Suplantación o acceso indebido.",
+		"c) Comunicación pública.",
+        "d) Daño culposo."
 	  ],
 	  "correct_answer_index": 1
 	},
 	{
 	  "type": "single_choice",
-	  "question": "Según el Artículo 9, ¿cuál condición agrava la pena entre una tercera parte y la mitad?",
+	  "question": "¿Qué acción NO constituye delito informático?",
+	  "answers": [
+		"a) Robar datos personales.",
+		"b) Acceder sin permiso a redes.",
+		"c) Escribir un programa educativo.",
+        "d) Difundir virus en Internet."
+	  ],
+	  "correct_answer_index": 2
+	},
+	{
+	  "type": "single_choice",
+	  "question": "¿Cuál condición agrava la pena entre una tercera parte y la mitad según el Artículo 9?",
 	  "answers": [
 		"a) Cuando el delito es cometido por un funcionario público.",
 		"b) Cuando afecta un sistema privado.",
@@ -373,25 +151,202 @@
 	},
 	{
 	  "type": "single_choice",
-	  "question": "¿Cuál delito se configura cuando una persona accede, captura o interfiere una señal ajena?",
+	  "question": "¿Qué significa 'fraude electrónico' según la ley?",
 	  "answers": [
-		"a) Acceso Indebido",
-		"b) Sabotaje o Daño de Sistemas",
-		"c) Violación de la Privacidad de la Data",
-        "d) Violación de la Privacidad de las Comunicaciones"
+		"a) Crear páginas falsas o engañar usando sistemas electrónicos.",
+		"b) Enviar un mensaje equivocado.",
+		"c) Instalar un juego pirata.",
+        "d) Hacer copias de seguridad."
 	  ],
-	  "correct_answer_index": 3
+	  "correct_answer_index": 0
 	},
 	{
-	  "type": "single_choice",
-	  "question": "¿Qué acción sanciona el delito de Sabotaje o Daño Culposo (Art. 8)?",
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Acceso indebido detectado! Entró a un sistema privado sin permiso. ¿Qué dice en su defensa?",
 	  "answers": [
-		"a) Destruir intencionalmente un sistema o sus componentes.",
-		"b) Acceder sin autorización por negligencia, sin intención de dañar.",
-		"c) Causar destrucción o alteración por imprudencia o negligencia.",
-        "d) Divulgar información reservada por error."
-	  ],
-	  "correct_answer_index": 2
+		{
+		  "text": "A: Solo quería aprender cómo funcionaba el sistema.",
+		  "success_chance": 55
+		},
+		{
+		  "text": "B: Fue por curiosidad, no con malas intenciones.",
+		  "success_chance": 45
+		},
+		{ "text": "C: No hice daño ni cambié datos.", "success_chance": 30 },
+		{ "text": "D: No sabía que era privado.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Robo de identidad digital! Usó la cuenta de otro usuario. ¿Cómo se justifica?",
+	  "answers": [
+		{
+		  "text": "A: Solo entré para revisar sus mensajes.",
+		  "success_chance": 40
+		},
+		{ "text": "B: Era una broma entre amigos.", "success_chance": 50 },
+		{ "text": "C: Tenía permiso verbal.", "success_chance": 60 },
+		{ "text": "D: No cambié su contraseña.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Archivo malicioso detectado! Su programa causó errores. ¿Qué responde?",
+	  "answers": [
+		{
+		  "text": "A: Era una herramienta de prueba sin daño intencional.",
+		  "success_chance": 55
+		},
+		{ "text": "B: Fue un error de programación.", "success_chance": 45 },
+		{ "text": "C: Mi antivirus no lo detectó.", "success_chance": 25 },
+		{ "text": "D: No lo envié a nadie.", "success_chance": 15 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Modificación de datos! Cambió registros en una base. ¿Qué dice?",
+	  "answers": [
+		{
+		  "text": "A: Solo corregí un error del sistema.",
+		  "success_chance": 60
+		},
+		{
+		  "text": "B: No afecté información importante.",
+		  "success_chance": 40
+		},
+		{ "text": "C: Fue una prueba técnica.", "success_chance": 30 },
+		{
+		  "text": "D: El sistema me lo permitió, así que no fue delito.",
+		  "success_chance": 20
+		}
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Contraseña filtrada! Consiguió claves de acceso. ¿Cómo lo justifica?",
+	  "answers": [
+		{
+		  "text": "A: Fue parte de una auditoría de seguridad.",
+		  "success_chance": 55
+		},
+		{
+		  "text": "B: Me las compartieron sin saber su valor.",
+		  "success_chance": 40
+		},
+		{ "text": "C: No las usé, solo las vi.", "success_chance": 30 },
+		{ "text": "D: Las encontré en Internet.", "success_chance": 15 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Publicó datos personales sin permiso! ¿Qué alega?",
+	  "answers": [
+		{ "text": "A: Los datos eran públicos.", "success_chance": 40 },
+		{ "text": "B: No sabía que necesitaba permiso.", "success_chance": 30 },
+		{ "text": "C: Fue por motivos educativos.", "success_chance": 45 },
+		{ "text": "D: Solo los compartí con amigos.", "success_chance": 25 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Correo falso detectado! Enviaba mensajes haciéndose pasar por otro. ¿Qué responde?",
+	  "answers": [
+		{
+		  "text": "A: Solo quería probar si la gente caía.",
+		  "success_chance": 50
+		},
+		{ "text": "B: No obtuve dinero con eso.", "success_chance": 35 },
+		{ "text": "C: Fue una broma.", "success_chance": 40 },
+		{ "text": "D: No cambié contraseñas.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Instalación de software ilegal! ¿Qué dice en su defensa?",
+	  "answers": [
+		{ "text": "A: Era solo para aprender.", "success_chance": 55 },
+		{ "text": "B: No lo usé con fines comerciales.", "success_chance": 45 },
+		{ "text": "C: Todos lo hacen.", "success_chance": 20 },
+		{ "text": "D: No sabía que era ilegal.", "success_chance": 25 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Interferencia en red escolar! Cambió configuraciones del WiFi. ¿Qué alega?",
+	  "answers": [
+		{ "text": "A: Quería mejorar la señal.", "success_chance": 50 },
+		{
+		  "text": "B: Fue sin querer al cambiar un cable.",
+		  "success_chance": 45
+		},
+		{
+		  "text": "C: Solo quería conectarme más rápido.",
+		  "success_chance": 30
+		},
+		{ "text": "D: Nadie me dijo que era delito.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Descarga de base de datos sin permiso! ¿Cuál es su explicación?",
+	  "answers": [
+		{
+		  "text": "A: Pensé que era información pública.",
+		  "success_chance": 50
+		},
+		{ "text": "B: Solo descargué una parte.", "success_chance": 35 },
+		{ "text": "C: No la compartí con nadie.", "success_chance": 25 },
+		{ "text": "D: Fue una prueba de conexión.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Manipuló registros digitales! ¿Cómo se defiende?",
+	  "answers": [
+		{
+		  "text": "A: Solo ajusté fechas para que coincidieran.",
+		  "success_chance": 50
+		},
+		{ "text": "B: Los datos eran de prueba.", "success_chance": 45 },
+		{ "text": "C: No hubo daño real.", "success_chance": 35 },
+		{
+		  "text": "D: El sistema estaba mal configurado.",
+		  "success_chance": 25
+		}
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Uso de software de ataque detectado! ¿Qué dice?",
+	  "answers": [
+		{ "text": "A: Era para un proyecto educativo.", "success_chance": 60 },
+		{
+		  "text": "B: Lo descargué de un foro sin saber.",
+		  "success_chance": 35
+		},
+		{ "text": "C: Nunca lo ejecuté.", "success_chance": 25 },
+		{ "text": "D: Fue mi amigo quien lo instaló.", "success_chance": 15 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Copia de archivos protegidos! ¿Cómo lo explica?",
+	  "answers": [
+		{ "text": "A: Era para hacer respaldo.", "success_chance": 55 },
+		{ "text": "B: No los compartí con nadie.", "success_chance": 40 },
+		{ "text": "C: Los necesitaba para estudiar.", "success_chance": 45 },
+		{ "text": "D: No sabía que eran protegidos.", "success_chance": 20 }
+	  ]
+	},
+	{
+	  "type": "percentage_choice",
+	  "question": "Agente: ¡Intento de hackeo detectado! ¿Qué responde?",
+	  "answers": [
+		{ "text": "A: Solo probaba la seguridad.", "success_chance": 55 },
+		{ "text": "B: Fue un error del sistema.", "success_chance": 40 },
+		{ "text": "C: No causé daños.", "success_chance": 35 },
+		{ "text": "D: No era mi computadora.", "success_chance": 15 }
+	  ]
 	}
   ]
 }

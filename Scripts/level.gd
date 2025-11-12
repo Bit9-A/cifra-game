@@ -128,9 +128,8 @@ func _on_hud_answer_selected(selected_answer_index: int) -> void:
 			check_win_condition() # Verificar si se cumple la condición de victoria
 			hud.process_answer_feedback(is_correct, selected_answer_index) # Procesar feedback y cargar siguiente pregunta en HUD
 			
-			# Intentar activar el minijuego de la laptop
-			randomize()
-			if randf() < minigame_activation_chance and current_laptop_minigame == null:
+			# Activar el minijuego de la laptop cada 5 preguntas respondidas
+			if questions_answered_count > 0 and questions_answered_count % 5 == 0 and current_laptop_minigame == null:
 				activate_laptop_minigame()
 				
 		else:
@@ -144,13 +143,24 @@ func activate_laptop_minigame() -> void:
 		current_laptop_minigame = laptop_minigame_scene.instantiate()
 		add_child(current_laptop_minigame)
 		current_laptop_minigame.minigame_completed.connect(on_laptop_minigame_completed)
-		get_tree().paused = true # Pausar el juego principal
+		# Ocultar la UI principal del HUD mientras el minijuego está activo
+		if hud:
+			hud.hide_game_ui()
+		# Desactivar movimiento del jugador si existe
+		if player and player.has_method("disable_movement"):
+			player.disable_movement()
+		# Iniciar el minijuego una vez instanciado
+		if current_laptop_minigame.has_method("start_minigame"):
+			current_laptop_minigame.start_minigame()
+		# No pausar el árbol. El Level ya evita actualizar tiempo y enemigos cuando
+		# current_laptop_minigame está presente (ver _process), así que pausar no es necesario
+		# y evita problemas con compatibilidad entre versiones de Godot.
 		print("Minijuego de la laptop activado.")
 	else:
 		push_error("Level: No se ha asignado la escena del minijuego de la laptop.")
 
 func on_laptop_minigame_completed(is_success: bool, time_change: float) -> void:
-	get_tree().paused = false # Reanudar el juego principal
+	# No usamos get_tree().paused: el minijuego no pausa el árbol ahora.
 	time_left += time_change
 	time_left = min(time_left, initial_time) # Limitar el tiempo máximo
 	time_updated.emit(time_left)
@@ -160,6 +170,12 @@ func on_laptop_minigame_completed(is_success: bool, time_change: float) -> void:
 	else:
 		print("Minijuego de la laptop fallido. Tiempo penalizado: ", time_change)
 		
+	# Restaurar la UI del HUD
+	if hud:
+		hud.show_game_ui()
+	# Reactivar movimiento del jugador si fue desactivado
+	if player and player.has_method("enable_movement"):
+		player.enable_movement()
 	current_laptop_minigame.queue_free()
 	current_laptop_minigame = null
 	check_win_condition() # Volver a verificar la condición de victoria después del minijuego
