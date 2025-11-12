@@ -1,0 +1,10 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cxpdoogkismdg"]
+
+[ext_resource type="Texture2D" uid="uid://dwdp2f053ph1k" path="res://assets/sprites/buttons/Button Normal.png" id="1_lrpme"]
+
+[resource]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+texture = ExtResource("1_lrpme")
