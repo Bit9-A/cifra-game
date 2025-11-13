@@ -1,0 +1,162 @@
+[gd_scene load_steps=11 format=3 uid="uid://cchsiqo5gf1ay"]
+
+[ext_resource type="Script" uid="uid://bfosj4ov5hwwl" path="res://Scripts/menu.gd" id="1_6487p"]
+[ext_resource type="Texture2D" uid="uid://b7jigcjvrxuwf" path="res://Assets/sprites/backgrounds/far-buildings.png" id="1_s6sq0"]
+[ext_resource type="Texture2D" uid="uid://ddumhbd18i0qc" path="res://Assets/sprites/backgrounds/back-buildings.png" id="2_6487p"]
+[ext_resource type="Texture2D" uid="uid://chcqb8e8q6v58" path="res://Assets/sprites/backgrounds/foreground.png" id="3_v3kjt"]
+[ext_resource type="Texture2D" uid="uid://cy7gxqtfo0wpp" path="res://Assets/sprites/cars/carS1.png" id="4_3hayu"]
+[ext_resource type="Texture2D" uid="uid://dxyaonsju72d1" path="res://Assets/sprites/backgrounds/Logo.png" id="5_3hayu"]
+[ext_resource type="Theme" uid="uid://diyj4a32fkhan" path="res://Assets/Themes/Buttons Theme/ButtonTheme.tres" id="5_vlcut"]
+[ext_resource type="AudioStream" uid="uid://dntp4hv5f81r1" path="res://Assets/sfx/Max Brhon - Cyberpunk ｜ Bass ｜ NCS - Copyright Free Music.wav" id="6_g37sx"]
+[ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="7_v3kjt"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3hayu"]
+font = ExtResource("7_v3kjt")
+font_size = 21
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6487p")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_s6sq0")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_6487p")
+expand_mode = 1
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_v3kjt")
+expand_mode = 1
+
+[node name="Car2" type="Sprite2D" parent="."]
+position = Vector2(324.00003, 95)
+scale = Vector2(0.5705678, 0.5589214)
+texture = ExtResource("5_3hayu")
+
+[node name="Car" type="Sprite2D" parent="."]
+position = Vector2(516, 419.99997)
+scale = Vector2(0.18203124, 0.19453122)
+texture = ExtResource("4_3hayu")
+
+[node name="MenuButtons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.5
+offset_top = -48.0
+offset_right = 77.0
+offset_bottom = 114.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(1, 1)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Start" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme = ExtResource("5_vlcut")
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+text = "Start"
+
+[node name="Options" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme = ExtResource("5_vlcut")
+text = "Options"
+
+[node name="Exit" type="Button" parent="MenuButtons"]
+layout_mode = 2
+theme = ExtResource("5_vlcut")
+text = "Exit"
+
+[node name="OptionsPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="OptionsPanel/VBoxContainer"]
+layout_mode = 2
+text = "OPCIONES "
+label_settings = SubResource("LabelSettings_3hayu")
+horizontal_alignment = 1
+
+[node name="Music" type="HSlider" parent="OptionsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="OptionsPanel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_vlcut")
+text = "Cerrar"
+
+[node name="Soundtrack" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_g37sx")
+volume_db = -10.495
+autoplay = true
+
+[connection signal="pressed" from="MenuButtons/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MenuButtons/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="MenuButtons/Exit" to="." method="_on_exit_pressed"]
