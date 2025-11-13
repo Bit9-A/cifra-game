@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dni5wk8jvehtm"]
+[gd_scene load_steps=11 format=3 uid="uid://dni5wk8jvehtm"]
 
 [ext_resource type="Script" uid="uid://coftsvv07lou2" path="res://Scripts/lose_screen.gd" id="1_6xaih"]
 [ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="1_f7j0d"]
@@ -6,6 +6,43 @@
 [ext_resource type="Texture2D" uid="uid://dqqo6kyor0las" path="res://Assets/sprites/buttons/Icons/Icon_34.png" id="4_3bpbr"]
 [ext_resource type="Theme" uid="uid://cupg8yu6xnd0k" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTheme3.tres" id="5_3bpbr"]
 [ext_resource type="Texture2D" uid="uid://bgw4rxvtkt70t" path="res://Assets/sprites/buttons/Icons/Icon_35.png" id="6_22qra"]
+[ext_resource type="Texture2D" uid="uid://douqey6a54hrx" path="res://Assets/sprites/backgrounds/black.png" id="7_22qra"]
+
+[sub_resource type="Animation" id="Animation_i78rd"]
+resource_name = "Fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iux8h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_meeha"]
+_data = {
+&"Fade_out": SubResource("Animation_i78rd"),
+&"RESET": SubResource("Animation_iux8h")
+}
 
 [node name="LoseScreen" type="Control"]
 layout_mode = 3
@@ -49,8 +86,8 @@ theme_override_constants/shadow_outline_size = 3
 theme_override_fonts/normal_font = ExtResource("1_f7j0d")
 theme_override_font_sizes/normal_font_size = 64
 bbcode_enabled = true
-text = "[center][wave]GAME OVER
-[/wave][/center]"
+text = "[center][shake]HAS PERDIDO
+[/shake][/center]"
 
 [node name="Score" type="RichTextLabel" parent="Center"]
 custom_minimum_size = Vector2(700, 75)
@@ -69,7 +106,7 @@ theme_override_fonts/normal_font = ExtResource("1_f7j0d")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-CORRECT: 0
+CORRECTAS: 0
 [/wave][/center]"
 
 [node name="Wrong" type="RichTextLabel" parent="Center"]
@@ -79,7 +116,7 @@ theme_override_fonts/normal_font = ExtResource("1_f7j0d")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-WRONG: 0
+ERRADAS: 0
 [/wave][/center]"
 
 [node name="Buttons" type="HBoxContainer" parent="."]
@@ -122,7 +159,18 @@ wait_time = 60.0
 one_shot = true
 autostart = true
 
-[connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_play_again_pressed"]
+[node name="Black" type="Sprite2D" parent="."]
+position = Vector2(307.00003, 246)
+scale = Vector2(1.2739273, 1.2089888)
+texture = ExtResource("7_22qra")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Black"]
+libraries = {
+&"": SubResource("AnimationLibrary_meeha")
+}
+autoplay = "Fade_out"
+
 [connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_play_again_pressed"]
 [connection signal="pressed" from="Buttons/ExitMenu" to="." method="_on_exit_menu_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

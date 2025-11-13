@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://byp4k4odrfn31"]
+[gd_scene load_steps=13 format=3 uid="uid://byp4k4odrfn31"]
 
 [ext_resource type="Texture2D" uid="uid://biiqb31plrh60" path="res://Assets/sprites/level/back.png" id="1_lscpc"]
 [ext_resource type="Texture2D" uid="uid://dae5xxrf410bc" path="res://Assets/sprites/level/buildings.png" id="2_06ioy"]
@@ -8,6 +8,43 @@
 [ext_resource type="PackedScene" uid="uid://oqwx76ituf1v" path="res://Scenes/UI/hud.tscn" id="6_7i4w6"]
 [ext_resource type="AudioStream" uid="uid://bw211avjgyjf4" path="res://Assets/sfx/Focus - Hocus Pocus (Dubstep Remix).wav" id="6_362x8"]
 [ext_resource type="Script" uid="uid://kly2yq42yicw" path="res://Scripts/level.gd" id="7_xxxx"]
+[ext_resource type="Texture2D" uid="uid://douqey6a54hrx" path="res://Assets/sprites/backgrounds/black.png" id="9_43gce"]
+
+[sub_resource type="Animation" id="Animation_i78rd"]
+resource_name = "Fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iux8h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_meeha"]
+_data = {
+&"Fade_out": SubResource("Animation_i78rd"),
+&"RESET": SubResource("Animation_iux8h")
+}
 
 [node name="Level" type="Node2D"]
 script = ExtResource("7_xxxx")
@@ -83,3 +120,14 @@ scale = Vector2(0.7, 0.7)
 target = NodePath("../Player")
 
 [node name="Hud" parent="." instance=ExtResource("6_7i4w6")]
+
+[node name="Black" type="Sprite2D" parent="."]
+position = Vector2(307.00003, 246)
+scale = Vector2(1.2739273, 1.2089888)
+texture = ExtResource("9_43gce")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Black"]
+libraries = {
+&"": SubResource("AnimationLibrary_meeha")
+}
+autoplay = "Fade_out"

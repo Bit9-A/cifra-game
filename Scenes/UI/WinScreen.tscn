@@ -1,12 +1,49 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1u6k0tn7sl4t"]
+[gd_scene load_steps=12 format=3 uid="uid://c1u6k0tn7sl4t"]
 
-[ext_resource type="Script" uid="uid://coftsvv07lou2" path="res://Scripts/lose_screen.gd" id="1_dhi7o"]
+[ext_resource type="Script" uid="uid://c7hyge7xxinla" path="res://Scripts/win_screen.gd" id="1_nxle1"]
 [ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="2_nxle1"]
 [ext_resource type="Theme" uid="uid://dajd6m3itkm0f" path="res://Assets/Themes/Buttons Theme/Button Green/ButtonTheme2.tres" id="3_i78rd"]
 [ext_resource type="Texture2D" uid="uid://kothwkgcdnap" path="res://Assets/sprites/buttons/Icons/Icon_11.png" id="3_nxle1"]
 [ext_resource type="Texture2D" uid="uid://dqqo6kyor0las" path="res://Assets/sprites/buttons/Icons/Icon_34.png" id="4_iux8h"]
 [ext_resource type="Theme" uid="uid://cupg8yu6xnd0k" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTheme3.tres" id="5_meeha"]
 [ext_resource type="Texture2D" uid="uid://bgw4rxvtkt70t" path="res://Assets/sprites/buttons/Icons/Icon_35.png" id="6_hs41l"]
+[ext_resource type="Texture2D" uid="uid://douqey6a54hrx" path="res://Assets/sprites/backgrounds/black.png" id="8_i78rd"]
+
+[sub_resource type="Animation" id="Animation_i78rd"]
+resource_name = "Fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_iux8h"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_meeha"]
+_data = {
+&"Fade_out": SubResource("Animation_i78rd"),
+&"RESET": SubResource("Animation_iux8h")
+}
 
 [node name="WinScreen" type="Control"]
 layout_mode = 3
@@ -15,7 +52,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dhi7o")
+script = ExtResource("1_nxle1")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
@@ -44,13 +81,18 @@ theme_override_constants/separation = -40
 [node name="You Win" type="RichTextLabel" parent="Center"]
 custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0.70069116, 0.43676755, 1.1551381e-06, 1)
 theme_override_constants/shadow_outline_size = 5
 theme_override_fonts/normal_font = ExtResource("2_nxle1")
 theme_override_font_sizes/normal_font_size = 64
 bbcode_enabled = true
-text = "[center][wave]YOU WIN!!
-[/wave][/center]"
+text = "[center][pulse][rainbow]GANASTE!!
+[/rainbow][/pulse][/center]"
+
+[node name="Trophy" type="Sprite2D" parent="Center"]
+self_modulate = Color(0.6052738, 0.4380794, 3.85046e-07, 1)
+position = Vector2(346.99997, 97)
+scale = Vector2(4.4999995, 4.7500014)
+texture = ExtResource("3_nxle1")
 
 [node name="Score" type="RichTextLabel" parent="Center"]
 custom_minimum_size = Vector2(700, 75)
@@ -59,7 +101,7 @@ theme_override_fonts/normal_font = ExtResource("2_nxle1")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-SCORE: 0
+PREGUNTAS CONTESTADAS
 [/wave][/center]"
 
 [node name="Correct" type="RichTextLabel" parent="Center"]
@@ -69,7 +111,7 @@ theme_override_fonts/normal_font = ExtResource("2_nxle1")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-CORRECT: 0
+CORRECTAS: 0
 [/wave][/center]"
 
 [node name="Wrong" type="RichTextLabel" parent="Center"]
@@ -79,13 +121,8 @@ theme_override_fonts/normal_font = ExtResource("2_nxle1")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-WRONG: 0
+ERRADAS: 0
 [/wave][/center]"
-
-[node name="Icon11" type="Sprite2D" parent="Center"]
-position = Vector2(347, 102)
-scale = Vector2(4.4999995, 4.7500014)
-texture = ExtResource("3_nxle1")
 
 [node name="Buttons" type="HBoxContainer" parent="."]
 custom_minimum_size = Vector2(60, 60)
@@ -122,12 +159,16 @@ icon = ExtResource("6_hs41l")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 60.0
-one_shot = true
-autostart = true
+[node name="Black" type="Sprite2D" parent="."]
+position = Vector2(307.00003, 246)
+scale = Vector2(1.2739273, 1.2089888)
+texture = ExtResource("8_i78rd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Black"]
+libraries = {
+&"": SubResource("AnimationLibrary_meeha")
+}
+autoplay = "Fade_out"
 
 [connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_play_again_pressed"]
-[connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="Buttons/ExitMenu" to="." method="_on_exit_menu_pressed"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

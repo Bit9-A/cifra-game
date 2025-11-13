@@ -201,12 +201,16 @@ func on_laptop_minigame_completed(is_success: bool) -> void:
 func check_win_condition() -> void:
 	# Victory if the player answered the required number of questions
 	if not game_over and questions_answered_count >= questions_to_win:
+		Global.last_questions_answered = questions_answered_count
+		Global.last_correct_answers = correct_answers_count
+		Global.last_wrong_answers = wrong_answers_count
+		Global.last_time_left = time_left
 		game_won_signal.emit()
 		save_score()
 		set_game_over(true) # Pausar el juego y mostrar mensaje de victoria
-		push_warning("¡Felicidades! ¡Has ganado el juego!")
-		# Mostrar pantalla de resultados con estadísticas
 		show_results_screen()
+		get_tree().change_scene_to_file("res://Scenes/UI/WinScreen.tscn")# Mostrar pantalla de resultados con estadísticas
+		
 
 func show_results_screen() -> void:
 	# Crear una UI de resultados simple en tiempo de ejecución (comportamiento dinámico)
