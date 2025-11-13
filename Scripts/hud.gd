@@ -3,223 +3,155 @@ extends CanvasLayer
 @onready var question_label: RichTextLabel = get_node("Panel/Panel2/Text")
 @onready var answer_buttons_container: Control = get_node("Panel/Panel2/AnswersButton")
 @onready var answer_buttons: Array[Button] = []
-@onready var time_label: Label = get_node("Panel/Panel2/TimeLabel") # Asumiendo que tienes un Label para el tiempo
-@onready var score_label: Label = get_node("Panel/Panel2/Score") # Asumiendo que tienes un Label para el Score
+@onready var time_label: Label = get_node("Panel/Panel2/TimeLabel")
+@onready var score_label: Label = get_node("Panel/Panel2/Score")
 
-var questions_data: Dictionary
+var questions_data: Dictionary = {}
 var current_question_index: int = -1
-var current_question_data: Dictionary
-var answer_delay_time: float = 1.5 # Tiempo de retardo en segundos
+var current_question_data: Dictionary = {}
+var answer_delay_time: float = 1.5
 
 signal answer_selected(selected_answer_index: int)
-signal request_current_question() # Señal para que el Level pida la pregunta actual
-signal question_loaded() # Nueva señal para indicar que una nueva pregunta ha sido cargada
+signal request_current_question()
+signal question_loaded()
 
 func _ready() -> void:
-	print("HUD: _ready() llamado.")
-	# Obtener referencias a los botones
+	# Inicializar botones de respuesta
 	if answer_buttons_container:
-		for i in range(answer_buttons_container.get_children().size()):
-			var child = answer_buttons_container.get_children()[i]
+		for child in answer_buttons_container.get_children():
 			if child is Button:
+				var idx = answer_buttons.size()
 				answer_buttons.append(child)
-				child.pressed.connect(on_answer_button_pressed.bind(i)) # Pasar el índice del botón
+				child.pressed.connect(on_answer_button_pressed.bind(idx))
 	else:
-		push_error("HUD: El nodo 'Panel/AnswersButton' no se encontró en el HUD.")
-		return # Salir si el contenedor de botones no se encuentra
+		push_error("HUD: El contenedor de botones no existe: Panel/Panel2/AnswersButton")
 
-	if question_label == null:
-		push_error("HUD: El nodo 'Panel/Text' no se encontró en el HUD.")
-		return
-	if time_label == null:
-		push_error("HUD: El nodo 'Panel/TimeLabel' no se encontró en el HUD.")
-		# No retornamos aquí, ya que la falta del TimeLabel no impide mostrar preguntas/respuestas
-		
-	load_questions_data("res://Data/Questions.json")
-	# La carga de la primera pregunta se moverá al Level para que el Level la controle.
-	# El Level llamará a load_random_question() en el HUD.
-	# Si la escena del HUD contiene un LaptopMinigame precolocado, mantenerlo oculto hasta activación
+	# Mantener un LaptopMinigame precolocado oculto si existe
 	var preplaced_lm = get_node_or_null("LaptopMinigame")
 	if preplaced_lm:
 		preplaced_lm.visible = false
 
+	load_questions_data("res://Data/Questions.json")
+
 func load_questions_data(path: String) -> void:
-	var file = FileAccess.open(path, FileAccess.READ)
-	if file:
-		var content = file.get_as_text()
-		var parse_result = JSON.parse_string(content)
-		print("HUD: Resultado del parseo JSON: ", parse_result, " (Tipo: ", typeof(parse_result), ")")
-		if parse_result is Dictionary and parse_result.has("questions"):
-			questions_data = parse_result
-			print("HUD: Preguntas cargadas. Número de preguntas: ", questions_data["questions"].size())
-			print("HUD: Contenido de questions_data['questions']: ", questions_data["questions"])
-		else:
-			push_error("HUD: Error al parsear el JSON de preguntas o falta la clave 'questions': ", parse_result)
-		file.close()
+	var f = FileAccess.open(path, FileAccess.READ)
+	if not f:
+		push_error("HUD: No se pudo abrir archivo: %s" % path)
+		return
+	var content = f.get_as_text()
+	f.close()
+	var parsed = JSON.parse_string(content)
+	if parsed is Dictionary and parsed.has("questions"):
+		questions_data = parsed
+		# emitir señal para que otros nodos sepan que hay preguntas cargadas
+		emit_signal("question_loaded")
 	else:
-		push_error("HUD: No se pudo abrir el archivo de preguntas: ", path)
+		push_error("HUD: JSON de preguntas inválido o falta 'questions'")
 
 func load_random_question() -> void:
-	print("HUD: load_random_question() llamado.")
-	if questions_data.has("questions") and not questions_data["questions"].is_empty():
-		randomize()
-		current_question_index = randi() % questions_data["questions"].size()
-		var selected_question = questions_data["questions"][current_question_index]
-		print("HUD: Pregunta seleccionada: ", selected_question, " (Tipo: ", typeof(selected_question), ")")
-		
-		if selected_question is Dictionary and selected_question.has("question"):
-			current_question_data = selected_question # Establecer current_question_data con la pregunta completa
-			display_question(current_question_data)
-			print("HUD: Pregunta mostrada: ", current_question_data["question"])
-		else:
-			push_error("HUD: La pregunta seleccionada no tiene el formato esperado (falta 'question').")
-			current_question_data = {} # Asegurarse de que sea un diccionario vacío si hay un error
-	else:
-		push_error("HUD: No hay preguntas para cargar o questions_data está vacío.")
-		current_question_data = {} # Asegurarse de que sea un diccionario vacío si hay un error
+	if not questions_data or not questions_data.has("questions"):
+		push_error("HUD: No hay preguntas cargadas para elegir.")
+		return
+	var list = questions_data["questions"]
+	if list.is_empty():
+		push_error("HUD: La lista de preguntas está vacía.")
+		return
+	current_question_index = randi() % list.size()
+	current_question_data = list[current_question_index]
+	display_question(current_question_data)
 
 func display_question(question_obj: Dictionary) -> void:
-	if not question_obj.has("question"):
-		push_error("HUD: El objeto de pregunta no tiene la clave 'question'.")
+	if not question_obj or not question_obj.has("question"):
+		push_error("HUD: Pregunta mal formada en display_question")
 		return
-	question_label.text = question_obj["question"]
+	question_label.text = str(question_obj["question"])
 
-	var answers_to_display: Array[String] = []
-	if question_obj.has("type"):
-		var question_type = question_obj["type"]
-		if question_type == "true_false":
-			answers_to_display = ["Verdadero", "Falso"]
-		elif question_type == "single_choice":
-			if question_obj.has("answers") and question_obj["answers"] is Array:
-				# Asegurarnos de convertir todos los elementos a String para evitar errores de tipo
-				for ans in question_obj["answers"]:
-					answers_to_display.append(str(ans))
+	var answers_to_display: Array = []
+	var qtype = question_obj.get("type", "single_choice")
+	if qtype == "true_false":
+		answers_to_display = ["Verdadero", "Falso"]
+	elif qtype == "single_choice":
+		var raw = question_obj.get("answers", [])
+		for a in raw:
+			answers_to_display.append(str(a))
+	elif qtype == "percentage_choice":
+		var raw2 = question_obj.get("answers", [])
+		for d in raw2:
+			if d is Dictionary and d.has("text"):
+				answers_to_display.append(str(d["text"]))
 			else:
-				push_error("HUD: single_choice sin 'answers' o 'answers' no es Array en display_question.")
-		elif question_type == "percentage_choice":
-			if question_obj.has("answers") and question_obj["answers"] is Array:
-				# Para percentage_choice, extraemos solo el texto de las respuestas
-				for ans_dict in question_obj["answers"]:
-					if ans_dict is Dictionary and ans_dict.has("text"):
-						answers_to_display.append(str(ans_dict["text"]))
-					else:
-						answers_to_display.append("Respuesta inválida")
-			else:
-				push_error("HUD: percentage_choice sin 'answers' o 'answers' no es Array en display_question.")
-		else:
-			push_error("HUD: Tipo de pregunta desconocido o respuestas mal formadas para display_question: ", question_type)
-	else:
-		push_error("HUD: El objeto de pregunta no tiene la clave 'type' para display_question.")
+				answers_to_display.append("Respuesta")
 
-	print("HUD: Respuestas a mostrar: ", answers_to_display, " (Tipo: ", typeof(answers_to_display), ")")
-
+	# Rellenar botones
 	for i in range(answer_buttons.size()):
 		if i < answers_to_display.size():
-			answer_buttons[i].text = answers_to_display[i]
-			answer_buttons[i].show()
+			answer_buttons[i].text = str(answers_to_display[i])
+			answer_buttons[i].visible = true
+			answer_buttons[i].disabled = false
+			answer_buttons[i].modulate = Color(1,1,1)
 		else:
-			answer_buttons[i].hide()
+			answer_buttons[i].visible = false
 
 func on_answer_button_pressed(index: int) -> void:
-	# Deshabilitar todos los botones para evitar múltiples selecciones
-	for button in answer_buttons:
-		button.disabled = true
-	answer_selected.emit(index) # Emitir la señal con el índice de la respuesta
+	for b in answer_buttons:
+		b.disabled = true
+	emit_signal("answer_selected", index)
 
 func process_answer_feedback(is_correct: bool, selected_index: int) -> void:
-	if selected_index >= 0 and selected_index < answer_buttons.size():
-		var selected_button = answer_buttons[selected_index]
-		if is_correct:
-			selected_button.modulate = Color.GREEN
-		else:
-			selected_button.modulate = Color.RED
-	
+	if selected_index >=0 and selected_index < answer_buttons.size():
+		var btn = answer_buttons[selected_index]
+		btn.modulate = Color(0,1,0) if is_correct else Color(1,0,0)
 	await get_tree().create_timer(answer_delay_time).timeout
-	
-	# Restablecer colores y habilitar botones
-	for button in answer_buttons:
-		button.modulate = Color.WHITE # Restablecer el color a blanco (o el color original)
-		button.disabled = false
-	
-	load_random_question() # Cargar la siguiente pregunta después del retardo
+	for b in answer_buttons:
+		b.modulate = Color(1,1,1)
+		b.disabled = false
+	load_random_question()
 
 func get_current_question_data() -> Dictionary:
-	if current_question_data:
-		var data_to_return = current_question_data.duplicate() # Devolver una copia para evitar modificaciones externas
-		
-		if data_to_return.has("type"):
-			var question_type = data_to_return["type"]
-			
-			if question_type == "true_false":
-				# Para true_false, las respuestas son fijas "Verdadero" y "Falso"
-				data_to_return["answers"] = ["Verdadero", "Falso"]
-			elif question_type == "single_choice":
-				# Para single_choice, las respuestas ya son un array de strings
-				# Asegurarse de que la clave 'answers' exista y sea un Array
-				if not data_to_return.has("answers") or not (data_to_return["answers"] is Array):
-					push_error("HUD: Pregunta single_choice mal formada: falta 'answers' o no es un Array.")
-					data_to_return["answers"] = []
-				else:
-					# Convertir todos los elementos a String para mantener Array[String]
-					var str_answers: Array[String] = []
-					for a in data_to_return["answers"]:
-						str_answers.append(str(a))
-					data_to_return["answers"] = str_answers
-			elif question_type == "percentage_choice":
-				# Para percentage_choice, las respuestas son un array de diccionarios con "text"
-				# Asegurarse de que la clave 'answers' exista y sea un Array
-				if not data_to_return.has("answers") or not (data_to_return["answers"] is Array):
-					push_error("HUD: Pregunta percentage_choice mal formada: falta 'answers' o no es un Array.")
-					data_to_return["answers"] = []
-			else:
-				push_error("HUD: Tipo de pregunta desconocido: ", question_type)
-				data_to_return["answers"] = [] # Fallback
-		else:
-			push_error("HUD: current_question_data no tiene la clave 'type'.")
-			data_to_return["answers"] = [] # Fallback
-		
-		# Asegurarse de que 'answers' siempre sea un Array antes de devolver
-		if not data_to_return.has("answers") or not (data_to_return["answers"] is Array):
-			push_error("HUD: Fallback: 'answers' no es un Array después de procesar.")
-			data_to_return["answers"] = []
-			
-		return data_to_return
-	else:
-		push_error("HUD: current_question_data es nulo.")
-		return {} # Devolver un diccionario vacío si no es válido
+	if not current_question_data:
+		return {}
+	var copy = current_question_data.duplicate()
+	var qtype = copy.get("type", "single_choice")
+	if qtype == "true_false":
+		copy["answers"] = ["Verdadero","Falso"]
+	elif qtype == "single_choice":
+		var out: Array = []
+		for a in copy.get("answers", []):
+			out.append(str(a))
+		copy["answers"] = out
+	return copy
 
 func _on_level_time_updated(new_time: float) -> void:
-	time_label.text = "Tiempo: %d" % int(new_time)
+	if time_label:
+		time_label.text = "Tiempo: %d" % int(new_time)
 
 func update_score_display(answered_count: int, total_to_win: int) -> void:
 	if score_label:
 		score_label.text = "Preguntas: %d/%d" % [answered_count, total_to_win]
 
 func _on_level_game_over_signal() -> void:
-	time_label.text = "¡Game Over!"
-	# Aquí puedes añadir más lógica para la pantalla de Game Over en el HUD
+	if time_label:
+		time_label.text = "¡Game Over!"
 
 func _on_level_game_won_signal() -> void:
-	time_label.text = "¡Has Ganado!"
-	# Aquí puedes añadir más lógica para la pantalla de victoria en el HUD
+	if time_label:
+		time_label.text = "¡Has Ganado!"
 
 func hide_game_ui(fade: bool = true) -> void:
-	# Oculta el Panel que contiene las preguntas y botones (Panel/Panel2) si existe,
-	# y además oculta el texto de la pregunta y los botones por seguridad.
 	var panel2 = get_node_or_null("Panel/Panel2")
-	if panel2:
-		if fade and panel2 is CanvasItem:
-			# Tween the alpha to 0 then hide
-			panel2.modulate.a = panel2.modulate.a if panel2.modulate else 1.0
-			var tw = create_tween()
-			tw.tween_property(panel2, "modulate:a", 0.0, 0.25)
-			tw.connect("finished", Callable(self, "_on_panel2_hidden_finished"))
-		else:
-			panel2.visible = false
+	if not panel2:
+		return
+	if fade and panel2 is CanvasItem:
+		panel2.modulate.a = panel2.modulate.a if panel2.modulate else 1.0
+		var tw = create_tween()
+		tw.tween_property(panel2, "modulate:a", 0.0, 0.25)
+		tw.connect("finished", Callable(self, "_on_panel2_hidden_finished"))
+	else:
+		panel2.visible = false
 	if question_label:
 		question_label.visible = false
-	for btn in answer_buttons:
-		btn.visible = false
+	for b in answer_buttons:
+		b.visible = false
 
 func _on_panel2_hidden_finished() -> void:
 	var panel2 = get_node_or_null("Panel/Panel2")
@@ -227,16 +159,15 @@ func _on_panel2_hidden_finished() -> void:
 		panel2.visible = false
 
 func show_game_ui(fade: bool = true) -> void:
-	# Muestra el Panel que contiene las preguntas y botones (Panel/Panel2) si existe,
-	# y además muestra el texto de la pregunta y los botones.
 	var panel2 = get_node_or_null("Panel/Panel2")
-	if panel2:
-		panel2.visible = true
-		if fade and panel2 is CanvasItem:
-			panel2.modulate.a = 0.0
-			var tw = create_tween()
-			tw.tween_property(panel2, "modulate:a", 1.0, 0.25)
+	if not panel2:
+		return
+	panel2.visible = true
+	if fade and panel2 is CanvasItem:
+		panel2.modulate.a = 0.0
+		var tw = create_tween()
+		tw.tween_property(panel2, "modulate:a", 1.0, 0.25)
 	if question_label:
 		question_label.visible = true
-	for btn in answer_buttons:
-		btn.visible = true
+	for b in answer_buttons:
+		b.visible = true

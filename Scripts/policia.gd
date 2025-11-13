@@ -62,11 +62,11 @@ func update_position_based_on_time(current_game_time: float, max_game_time: floa
 # Se llama desde GameManager cuando el jugador falla una pregunta
 func lunge():
 	if not is_lunging:
-		print("¡La policía embiste!")
+		push_warning("¡La policía embiste!")
 		is_lunging = true
 		lunge_timer.start(0.5) # Duración de la embestida, puede ser un @export var si se necesita
 		# No hay cambio de velocidad aquí, solo el estado visual/de captura
 
 func _on_lunge_timer_timeout():
-	print("La embestida de la policía ha terminado.")
+	push_warning("La embestida de la policía ha terminado.")
 	is_lunging = false

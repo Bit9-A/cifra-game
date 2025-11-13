@@ -1,0 +1,2 @@
+; ResultsScreen.tscn removed - placeholder file
+; The dynamic-only results UI is now created by Level.show_results_screen().

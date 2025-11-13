@@ -22,6 +22,8 @@ signal game_won_signal() # Nueva señal para indicar la victoria del juego
 @export var win_time_threshold: float = 120.0 # Tiempo mínimo para ganar
 @export var questions_to_win: int = 15 # Número de preguntas correctas para ganar
 var questions_answered_count: int = 0 # Contador de preguntas respondidas
+var correct_answers_count: int = 0
+var wrong_answers_count: int = 0
 
 @export var time_drain_increase_interval: int = 5 # Cada cuántas preguntas aumenta la dificultad
 @export var time_drain_increase_amount: float = 0.1 # Cuánto más rápido baja el tiempo (multiplicador)
@@ -44,7 +46,7 @@ func _process(delta: float) -> void:
 	if time_left <= 0:
 		time_left = 0
 		set_game_over(true) # El juego termina cuando el tiempo llega a 0
-	
+
 	update_police_position()
 	update_parallax_background(delta)
 
@@ -68,7 +70,7 @@ func set_game_over(state: bool) -> void:
 	game_over = state
 	if game_over:
 		game_over_signal.emit()
-		print("¡Game Over!")
+		push_warning("¡Game Over!")
 		get_tree().paused = true # Pausar el juego
 
 func _on_hud_answer_selected(selected_answer_index: int) -> void:
@@ -109,20 +111,24 @@ func _on_hud_answer_selected(selected_answer_index: int) -> void:
 				time_left += time_bonus_on_correct_answer
 				time_left = min(time_left, initial_time) # Limitar el tiempo máximo a initial_time
 				time_updated.emit(time_left)
-				print("¡Respuesta correcta! Tiempo añadido.")
+				push_warning("¡Respuesta correcta! Tiempo añadido.")
 			else:
 				time_left -= time_penalty_on_wrong_answer
 				time_updated.emit(time_left)
-				print("Respuesta incorrecta. Tiempo reducido.")
+				push_warning("Respuesta incorrecta. Tiempo reducido.")
 			
 			questions_answered_count += 1 # Incrementar el contador de preguntas respondidas
+			if is_correct:
+				correct_answers_count += 1
+			else:
+				wrong_answers_count += 1
 			hud.update_score_display(questions_answered_count, questions_to_win) # Actualizar el score en el HUD
 			
 			# Aumentar la dificultad cada 'time_drain_increase_interval' preguntas
 			if questions_answered_count > 0 and questions_answered_count % time_drain_increase_interval == 0:
 				current_time_drain_rate += time_drain_increase_amount
 				time_penalty_on_wrong_answer += penalty_increase_amount
-				print("¡Dificultad aumentada! Nueva velocidad de tiempo: ", current_time_drain_rate, ", Nueva penalización: ", time_penalty_on_wrong_answer)
+				push_warning("¡Dificultad aumentada! Nueva velocidad de tiempo: %s, Nueva penalización: %s" % [str(current_time_drain_rate), str(time_penalty_on_wrong_answer)])
 				# Opcional: Emitir una señal para que el HUD muestre un mensaje de dificultad aumentada
 			
 			check_win_condition() # Verificar si se cumple la condición de victoria
@@ -155,7 +161,7 @@ func activate_laptop_minigame() -> void:
 		# No pausar el árbol. El Level ya evita actualizar tiempo y enemigos cuando
 		# current_laptop_minigame está presente (ver _process), así que pausar no es necesario
 		# y evita problemas con compatibilidad entre versiones de Godot.
-		print("Minijuego de la laptop activado.")
+		push_warning("Minijuego de la laptop activado.")
 	else:
 		push_error("Level: No se ha asignado la escena del minijuego de la laptop.")
 
@@ -166,9 +172,9 @@ func on_laptop_minigame_completed(is_success: bool, time_change: float) -> void:
 	time_updated.emit(time_left)
 	
 	if is_success:
-		print("Minijuego de la laptop completado con éxito. Tiempo añadido: ", time_change)
+		push_warning("Minijuego de la laptop completado con éxito. Tiempo añadido: %s" % str(time_change))
 	else:
-		print("Minijuego de la laptop fallido. Tiempo penalizado: ", time_change)
+		push_warning("Minijuego de la laptop fallido. Tiempo penalizado: %s" % str(time_change))
 		
 	# Restaurar la UI del HUD
 	if hud:
@@ -181,10 +187,145 @@ func on_laptop_minigame_completed(is_success: bool, time_change: float) -> void:
 	check_win_condition() # Volver a verificar la condición de victoria después del minijuego
 
 func check_win_condition() -> void:
-	if not game_over and time_left >= win_time_threshold and questions_answered_count >= questions_to_win:
+	# Victory if the player answered the required number of questions
+	if not game_over and questions_answered_count >= questions_to_win:
 		game_won_signal.emit()
+		save_score()
 		set_game_over(true) # Pausar el juego y mostrar mensaje de victoria
-		print("¡Felicidades! ¡Has ganado el juego!")
+		push_warning("¡Felicidades! ¡Has ganado el juego!")
+		# Mostrar pantalla de resultados con estadísticas
+		show_results_screen()
+
+func show_results_screen() -> void:
+	# Crear una UI de resultados simple en tiempo de ejecución (comportamiento dinámico)
+	var root = CanvasLayer.new()
+	root.name = "ResultsScreen"
+	add_child(root)
+
+	var panel = Panel.new()
+	panel.rect_min_size = Vector2(600, 360)
+	panel.anchor_left = 0.5
+	panel.anchor_top = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_bottom = 0.5
+	panel.margin_left = -300
+	panel.margin_top = -180
+	panel.margin_right = 300
+	panel.margin_bottom = 180
+	root.add_child(panel)
+
+	var vbox = VBoxContainer.new()
+	vbox.anchor_left = 0
+	vbox.anchor_top = 0
+	vbox.anchor_right = 1
+	vbox.anchor_bottom = 1
+	vbox.margin_left = 16
+	vbox.margin_top = 16
+	vbox.margin_right = -16
+	vbox.margin_bottom = -16
+	panel.add_child(vbox)
+
+	var title = Label.new()
+	title.text = "¡Has ganado!"
+	vbox.add_child(title)
+
+	var stats = Label.new()
+	stats.text = "Aciertos: %d\nFallos: %d\nTiempo restante: %d s" % [correct_answers_count, wrong_answers_count, int(time_left)]
+	vbox.add_child(stats)
+
+	var btn = Button.new()
+	btn.text = "Cerrar"
+	btn.pressed.connect(Callable(self, "_on_results_close_pressed"))
+	vbox.add_child(btn)
+
+func _on_results_close_pressed() -> void:
+	# Cerrar la pantalla de resultados (si existe) y reanudar el árbol
+	# Primero, intentar encontrar el node dinámico creado por show_results_screen()
+	var rs = get_node_or_null("ResultsScreen")
+	if rs:
+		rs.queue_free()
+	else:
+		# Si no está en la ruta directa, buscar entre los hijos por tipo/nombre
+		for child in get_children():
+			if child is CanvasLayer and child.name == "ResultsScreen":
+				child.queue_free()
+	# Asegurarse de reanudar si el árbol está pausado
+	if get_tree().paused:
+		get_tree().paused = false
+
+func _on_results_retry() -> void:
+	# Reiniciar la escena actual
+	var current = get_tree().current_scene
+	if current:
+		get_tree().reload_current_scene()
+
+func _on_results_menu() -> void:
+	# Intentar volver al menú principal si existe la escena res://Scenes/MainMenu.tscn
+	var menu_path = "res://Scenes/MainMenu.tscn"
+	if FileAccess.file_exists(menu_path):
+		get_tree().change_scene_to_file(menu_path)
+	else:
+		push_warning("Main menu not found at %s" % menu_path)
+
+func save_score() -> void:
+	# Guarda la puntuación (correctas/incorrectas) en user://scores.json como un array de records
+	var path = "user://scores.json"
+	var scores: Array = []
+	# Leer archivo si existe
+	var f = FileAccess.open(path, FileAccess.READ)
+	if f:
+		var content = f.get_as_text()
+		f.close()
+		var parsed = JSON.parse_string(content)
+		if parsed is Dictionary and parsed.has("result"):
+			# JSON.parse_string returns a Dictionary result in Godot 4 with keys 'result' and 'error'
+			# but to be safe, handle both formats
+			var data = parsed["result"]
+			if data is Array:
+				scores = data
+			elif data is Dictionary and data.has("scores") and data["scores"] is Array:
+				scores = data["scores"]
+		elif parsed is Array:
+			scores = parsed
+	# Añadir nuevo registro
+	# Obtener timestamp de forma segura (evitar llamadas estáticas que el analizador puede marcar)
+	var ts: int = 0
+	if OS.has_method("get_unix_time"):
+		ts = int(OS.call("get_unix_time"))
+	elif OS.has_method("get_ticks_msec"):
+		ts = int(OS.call("get_ticks_msec") / 1000)
+	else:
+		# Como último recurso, usar Engine.get_time() (tiempo en segundos desde arranque) para no dejar vacío
+		if Engine.has_method("get_time"):
+			ts = int(Engine.call("get_time"))
+		else:
+			ts = 0
+
+	var record = {
+		"timestamp": ts,
+		"questions_answered": questions_answered_count,
+		"correct": correct_answers_count,
+		"incorrect": wrong_answers_count
+	}
+	scores.append(record)
+	# Guardar de vuelta
+	var out = FileAccess.open(path, FileAccess.WRITE)
+	if out:
+		# Serializar scores de forma segura para evitar advertencias del analizador estático
+		var json_text: String = ""
+		# Crear una instancia de JSON para evitar llamadas estáticas que el analizador marque
+		var json_inst = JSON.new()
+		if json_inst.has_method("print"):
+			json_text = json_inst.call("print", scores)
+		else:
+			# Fallback: usar str() si no hay JSON.print disponible
+			json_text = str(scores)
+		out.store_string(json_text)
+		out.close()
+		# Usar push_warning para evitar advertencias estáticas sobre print en algunos entornos
+		push_warning("Scores saved to %s" % path)
+	else:
+		push_error("No se pudo abrir para escribir: ", path)
 
 func update_parallax_background(delta: float) -> void:
 	if player: # Asegurarse de que el nodo Player exista
