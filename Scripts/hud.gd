@@ -3,7 +3,7 @@ extends CanvasLayer
 @onready var question_label: RichTextLabel = get_node("Panel/Panel2/Text")
 @onready var answer_buttons_container: Control = get_node("Panel/Panel2/AnswersButton")
 @onready var answer_buttons: Array[Button] = []
-@onready var time_label: Label = get_node("Panel/Panel2/TimeLabel")
+@onready var time_label: Label = get_node("Panel/TimeLabel")
 @onready var score_label: Label = get_node("Panel/Panel2/Score")
 
 var questions_data: Dictionary = {}

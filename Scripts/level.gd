@@ -37,9 +37,13 @@ var current_laptop_minigame: CanvasLayer = null # Referencia a la instancia del 
 
 
 func _process(delta: float) -> void:
-	if game_over or current_laptop_minigame: # No actualizar el tiempo si el minijuego está activo
+	# Si game_over está activado, detenemos la actualización; no pausamos el árbol
+	# Ya no interrumpimos la actualización cuando hay un minijuego activo —
+	# queremos que el tiempo, la policía y los fondos sigan actualizándose.
+	if game_over:
 		return
 
+	# Actualizar tiempo normalmente incluso si hay un minijuego activo
 	time_left -= delta * current_time_drain_rate # Usar el multiplicador de dificultad
 	time_updated.emit(time_left)
 
@@ -148,13 +152,15 @@ func activate_laptop_minigame() -> void:
 	if laptop_minigame_scene:
 		current_laptop_minigame = laptop_minigame_scene.instantiate()
 		add_child(current_laptop_minigame)
-		current_laptop_minigame.minigame_completed.connect(on_laptop_minigame_completed)
+		# Conectar señales: cambios de tiempo por intento y finalización del minijuego
+		if current_laptop_minigame.has_signal("attempt_result"):
+			current_laptop_minigame.attempt_result.connect(Callable(self, "on_laptop_minigame_attempt_result"))
+		current_laptop_minigame.minigame_completed.connect(Callable(self, "on_laptop_minigame_completed"))
 		# Ocultar la UI principal del HUD mientras el minijuego está activo
 		if hud:
 			hud.hide_game_ui()
-		# Desactivar movimiento del jugador si existe
-		if player and player.has_method("disable_movement"):
-			player.disable_movement()
+		# No deshabilitamos el movimiento del jugador durante el minijuego;
+		# el jugador seguirá pudiendo moverse mientras la UI del minijuego esté abierta.
 		# Iniciar el minijuego una vez instanciado
 		if current_laptop_minigame.has_method("start_minigame"):
 			current_laptop_minigame.start_minigame()
@@ -165,17 +171,19 @@ func activate_laptop_minigame() -> void:
 	else:
 		push_error("Level: No se ha asignado la escena del minijuego de la laptop.")
 
-func on_laptop_minigame_completed(is_success: bool, time_change: float) -> void:
-	# No usamos get_tree().paused: el minijuego no pausa el árbol ahora.
+func on_laptop_minigame_attempt_result(time_change: float) -> void:
+	# Aplicar cambios de tiempo inmediatamente conforme se producen los intentos
 	time_left += time_change
-	time_left = min(time_left, initial_time) # Limitar el tiempo máximo
+	time_left = min(time_left, initial_time)
 	time_updated.emit(time_left)
-	
+
+func on_laptop_minigame_completed(is_success: bool) -> void:
+	# Finalización del minijuego (no aplicar cambios de tiempo aquí; se aplicaron por intento)
 	if is_success:
-		push_warning("Minijuego de la laptop completado con éxito. Tiempo añadido: %s" % str(time_change))
+		push_warning("Minijuego de la laptop completado con éxito.")
 	else:
-		push_warning("Minijuego de la laptop fallido. Tiempo penalizado: %s" % str(time_change))
-		
+		push_warning("Minijuego de la laptop finalizado (fallos suficientes).")
+
 	# Restaurar la UI del HUD
 	if hud:
 		hud.show_game_ui()

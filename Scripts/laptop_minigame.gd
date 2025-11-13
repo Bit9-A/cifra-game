@@ -22,7 +22,8 @@ var hidden_word_display: String = ""
 var attempts_done: int = 0
 var successes: int = 0
 
-signal minigame_completed(is_success: bool, time_change: float)
+signal attempt_result(time_change: float)
+signal minigame_completed(is_success: bool)
 
 func _ready() -> void:
 	submit_button.pressed.connect(on_submit_button_pressed)
@@ -61,7 +62,9 @@ func load_words_data(path: String) -> void:
 func start_minigame() -> void:
 	if words_data.is_empty():
 		push_error("LaptopMinigame: No hay palabras para el minijuego.")
-		minigame_completed.emit(false, -time_penalty_on_fail)
+		# Emitir un intento fallido y finalizar
+		attempt_result.emit(-time_penalty_on_fail)
+		minigame_completed.emit(false)
 		queue_free()
 		return
 
@@ -115,13 +118,15 @@ func on_timer_timeout() -> void:
 	guess_input.editable = false
 	submit_button.disabled = true
 	attempts_done += 1
+	# Emitir el efecto de tiempo por intento fallido
+	attempt_result.emit(-time_penalty_on_fail)
 	# Pequeño retardo para mostrar feedback
 	await get_tree().create_timer(1.0).timeout
 	if attempts_done < attempts_required:
 		# Continuar con la siguiente palabra
 		start_next_attempt()
 	else:
-		# Finalizar minijuego: emitir resultado acumulado
+		# Finalizar minijuego
 		finalize_minigame()
 
 func check_guess() -> void:
@@ -133,21 +138,28 @@ func check_guess() -> void:
 		submit_button.disabled = true
 		successes += 1
 		attempts_done += 1
+		# Emitir recompensa inmediata
+		attempt_result.emit(time_reward_on_success)
 		await get_tree().create_timer(1.0).timeout
 		if attempts_done < attempts_required:
 			start_next_attempt()
 		else:
 			finalize_minigame()
 	else:
-		# Intento fallido: mostrar feedback y reintentar (cuenta como intento fallido)
-		feedback_label.text = "Incorrecto. Intenta de nuevo."
+		# Intento fallido: mostrar feedback y pasar a la siguiente palabra
+		feedback_label.text = "Incorrecto. La palabra era: %s" % current_word
 		guess_input.text = ""
 		guess_input.grab_focus()
 		attempts_done += 1
+		# Emitir penalización inmediata
+		attempt_result.emit(-time_penalty_on_fail)
 		if attempts_done < attempts_required:
-			timer.start() # Reiniciar el temporizador para otro intento
+			# Pequeño retardo para mostrar feedback y continuar
+			await get_tree().create_timer(1.0).timeout
+			start_next_attempt()
 		else:
 			# Ya se completaron todos los intentos
+			await get_tree().create_timer(1.0).timeout
 			finalize_minigame()
 
 func finalize_minigame() -> void:
@@ -155,8 +167,8 @@ func finalize_minigame() -> void:
 	var fails = attempts_required - successes
 	var total_time_change = successes * time_reward_on_success - fails * time_penalty_on_fail
 	var is_success = total_time_change > 0
-	# Emitir el resultado acumulado
-	minigame_completed.emit(is_success, total_time_change)
+	# Emitir resultado final (sin aplicar cambio de tiempo adicional, ya aplicado por attempt_result)
+	minigame_completed.emit(is_success)
 	queue_free()
 
 func on_guess_text_entered(submitted_text: String) -> void:

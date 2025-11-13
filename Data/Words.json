@@ -9,6 +9,20 @@
     "HACKER",
     "PROTOCOLO",
     "AUTENTICACION",
-    "VULNERABILIDAD"
+    "VULNERABILIDAD",
+    "RANSOMWARE",
+    "BOTNET",
+    "BACKDOOR",
+    "EXPLOIT",
+    "DDOS",
+    "KEYLOGGER",
+    "SOCIAL_ENGINEERING",
+    "VPN",
+    "ZERO_DAY",
+    "PATCH",
+    "SPOOFING",
+    "MITM",
+    "MARCO",
+    "LEGAL"
   ]
 }

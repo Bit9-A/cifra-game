@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://oqwx76ituf1v"]
+[gd_scene load_steps=5 format=3 uid="uid://oqwx76ituf1v"]
 
 [ext_resource type="Script" uid="uid://dfoq7j8pvqgtc" path="res://Scripts/hud.gd" id="1_sprlj"]
 [ext_resource type="FontFile" uid="uid://bfmsaoba6bqb" path="res://Assets/fonts/PixelAE-Regular.ttf" id="2_ny26j"]
 [ext_resource type="PackedScene" uid="uid://d20jo2ysdhhu2" path="res://Scenes/UI/LaptopMinigame.tscn" id="3_fdl0h"]
+
+[sub_resource type="Theme" id="Theme_fdl0h"]
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_sprlj")
@@ -24,6 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_fdl0h")
 color = Color(0, 0, 0, 1)
 
 [node name="AnswersButton" type="VBoxContainer" parent="Panel/Panel2"]
@@ -72,13 +75,6 @@ offset_top = 14.0
 offset_right = 264.0
 offset_bottom = 119.0
 
-[node name="TimeLabel" type="Label" parent="Panel/Panel2"]
-layout_mode = 0
-offset_left = 2.0
-offset_top = -55.0
-offset_right = 277.0
-offset_bottom = -21.0
-
 [node name="Score" type="Label" parent="Panel/Panel2"]
 layout_mode = 0
 offset_left = -317.0
@@ -88,3 +84,10 @@ offset_bottom = -38.0
 theme_override_fonts/font = ExtResource("2_ny26j")
 theme_override_font_sizes/font_size = 18
 text = "Score: 0/15"
+
+[node name="TimeLabel" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = -55.0
+offset_right = 277.0
+offset_bottom = -21.0
