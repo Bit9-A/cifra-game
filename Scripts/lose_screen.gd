@@ -3,7 +3,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Center/Score.bbcode_text = "[center]Preguntas contestadas[/center] \n %d" % Global.last_questions_answered
+	$Center/Score.bbcode_text = "[center]Preguntas contestadas[/center] \n"
 	
 	$Center/Correct.bbcode_text = "[center][color=green]Respuestas correctas:[/color][/center] %d" % Global.last_correct_answers
 	

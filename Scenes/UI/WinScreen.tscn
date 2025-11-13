@@ -8,7 +8,7 @@
 [ext_resource type="Theme" uid="uid://cupg8yu6xnd0k" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTheme3.tres" id="5_meeha"]
 [ext_resource type="Texture2D" uid="uid://bgw4rxvtkt70t" path="res://Assets/sprites/buttons/Icons/Icon_35.png" id="6_hs41l"]
 
-[node name="LoseScreen" type="Control"]
+[node name="WinScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

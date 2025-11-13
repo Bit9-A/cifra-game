@@ -73,9 +73,13 @@ func update_police_position() -> void:
 func set_game_over(state: bool) -> void:
 	game_over = state
 	if game_over:
+		Global.last_questions_answered = questions_answered_count
+		Global.last_correct_answers = correct_answers_count
+		Global.last_wrong_answers = wrong_answers_count
+		Global.last_time_left = time_left
 		game_over_signal.emit()
 		push_warning("¡Game Over!")
-		get_tree().paused = true # Pausar el juego
+		get_tree().change_scene_to_file("res://Scenes/UI/LoseScreen.tscn")
 
 func _on_hud_answer_selected(selected_answer_index: int) -> void:
 	if game_over:

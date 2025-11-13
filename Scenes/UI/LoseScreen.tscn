@@ -23,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 color = Color(0, 0, 0, 1)
 
 [node name="Center" type="VBoxContainer" parent="."]
@@ -58,7 +59,7 @@ theme_override_fonts/normal_font = ExtResource("1_f7j0d")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
-SCORE: 0
+PREGUNTAS CONTESTADAS
 [/wave][/center]"
 
 [node name="Correct" type="RichTextLabel" parent="Center"]
@@ -79,16 +80,6 @@ theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center][wave]
 WRONG: 0
-[/wave][/center]"
-
-[node name="TimeLeft" type="RichTextLabel" parent="Center"]
-custom_minimum_size = Vector2(700, 75)
-layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("1_f7j0d")
-theme_override_font_sizes/normal_font_size = 24
-bbcode_enabled = true
-text = "[center][wave]
-Time Left: 0
 [/wave][/center]"
 
 [node name="Buttons" type="HBoxContainer" parent="."]
