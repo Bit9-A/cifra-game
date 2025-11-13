@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://chcqb8e8q6v58" path="res://Assets/sprites/backgrounds/foreground.png" id="3_v3kjt"]
 [ext_resource type="Texture2D" uid="uid://cy7gxqtfo0wpp" path="res://Assets/sprites/cars/carS1.png" id="4_3hayu"]
 [ext_resource type="Texture2D" uid="uid://dxyaonsju72d1" path="res://Assets/sprites/backgrounds/Logo.png" id="5_3hayu"]
-[ext_resource type="Theme" uid="uid://diyj4a32fkhan" path="res://Assets/Themes/Buttons Theme/ButtonTheme.tres" id="5_vlcut"]
+[ext_resource type="Theme" uid="uid://diyj4a32fkhan" path="res://Assets/Themes/Buttons Theme/Button UI/ButtonTheme.tres" id="5_vlcut"]
 [ext_resource type="AudioStream" uid="uid://dntp4hv5f81r1" path="res://Assets/sfx/Max Brhon - Cyberpunk ｜ Bass ｜ NCS - Copyright Free Music.wav" id="6_g37sx"]
 [ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="7_v3kjt"]
 
@@ -22,15 +22,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6487p")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1

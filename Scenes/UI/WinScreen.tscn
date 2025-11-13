@@ -1,0 +1,133 @@
+[gd_scene load_steps=8 format=3 uid="uid://c1u6k0tn7sl4t"]
+
+[ext_resource type="Script" uid="uid://coftsvv07lou2" path="res://Scripts/lose_screen.gd" id="1_dhi7o"]
+[ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="2_nxle1"]
+[ext_resource type="Theme" uid="uid://dajd6m3itkm0f" path="res://Assets/Themes/Buttons Theme/Button Green/ButtonTheme2.tres" id="3_i78rd"]
+[ext_resource type="Texture2D" uid="uid://kothwkgcdnap" path="res://Assets/sprites/buttons/Icons/Icon_11.png" id="3_nxle1"]
+[ext_resource type="Texture2D" uid="uid://dqqo6kyor0las" path="res://Assets/sprites/buttons/Icons/Icon_34.png" id="4_iux8h"]
+[ext_resource type="Theme" uid="uid://cupg8yu6xnd0k" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTheme3.tres" id="5_meeha"]
+[ext_resource type="Texture2D" uid="uid://bgw4rxvtkt70t" path="res://Assets/sprites/buttons/Icons/Icon_35.png" id="6_hs41l"]
+
+[node name="LoseScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dhi7o")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Center" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -145.0
+offset_right = 350.0
+offset_bottom = 145.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -40
+
+[node name="You Win" type="RichTextLabel" parent="Center"]
+custom_minimum_size = Vector2(700, 150)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0.70069116, 0.43676755, 1.1551381e-06, 1)
+theme_override_constants/shadow_outline_size = 5
+theme_override_fonts/normal_font = ExtResource("2_nxle1")
+theme_override_font_sizes/normal_font_size = 64
+bbcode_enabled = true
+text = "[center][wave]YOU WIN!!
+[/wave][/center]"
+
+[node name="Score" type="RichTextLabel" parent="Center"]
+custom_minimum_size = Vector2(700, 75)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_nxle1")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center][wave]
+SCORE: 0
+[/wave][/center]"
+
+[node name="Correct" type="RichTextLabel" parent="Center"]
+custom_minimum_size = Vector2(700, 75)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_nxle1")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center][wave]
+CORRECT: 0
+[/wave][/center]"
+
+[node name="Wrong" type="RichTextLabel" parent="Center"]
+custom_minimum_size = Vector2(700, 75)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_nxle1")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "[center][wave]
+WRONG: 0
+[/wave][/center]"
+
+[node name="Icon11" type="Sprite2D" parent="Center"]
+position = Vector2(347, 102)
+scale = Vector2(4.4999995, 4.7500014)
+texture = ExtResource("3_nxle1")
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = -96.0
+offset_right = 59.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="PlayAgain" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_i78rd")
+icon = ExtResource("4_iux8h")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ExitMenu" type="Button" parent="Buttons"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("5_meeha")
+icon = ExtResource("6_hs41l")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+autostart = true
+
+[connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_play_again_pressed"]
+[connection signal="pressed" from="Buttons/PlayAgain" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Buttons/ExitMenu" to="." method="_on_exit_menu_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

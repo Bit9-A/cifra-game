@@ -1,0 +1,17 @@
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://cupg8yu6xnd0k"]
+
+[ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="1_8hxt7"]
+[ext_resource type="StyleBox" uid="uid://c1qu0it7fesk4" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTextureHover2.tres" id="2_8sdd2"]
+[ext_resource type="StyleBox" uid="uid://xe1i6gsyt4g4" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTextureNormal2.tres" id="3_cgbbi"]
+[ext_resource type="StyleBox" uid="uid://d4aejfurku224" path="res://Assets/Themes/Buttons Theme/Buttons Red/ButtonTexturePressed2.tres" id="4_02mcg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l38aq"]
+
+[resource]
+default_base_scale = 1.6
+Button/font_sizes/font_size = 20
+Button/fonts/font = ExtResource("1_8hxt7")
+Button/styles/focus = SubResource("StyleBoxEmpty_l38aq")
+Button/styles/hover = ExtResource("2_8sdd2")
+Button/styles/normal = ExtResource("3_cgbbi")
+Button/styles/pressed = ExtResource("4_02mcg")
