@@ -433,7 +433,9 @@ func show_example_dialogue_balloon(resource: DialogueResource, title: String = "
 ## Show the configured dialogue balloon
 func show_dialogue_balloon(resource: DialogueResource, title: String = "", extra_game_states: Array = []) -> Node:
 	var balloon_path: String = DMSettings.get_setting(DMSettings.BALLOON_PATH, _get_example_balloon_path())
-	if not ResourceLoader.exists(balloon_path):
+	# ResourceLoader.exists can be unavailable in some engine/static-analysis setups.
+	# Use FileAccess.file_exists for a safer, cross-version file existence check.
+	if not FileAccess.file_exists(balloon_path):
 		balloon_path = _get_example_balloon_path()
 	return show_dialogue_balloon_scene(balloon_path, resource, title, extra_game_states)
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://oqwx76ituf1v"]
+[gd_scene load_steps=6 format=3 uid="uid://oqwx76ituf1v"]
 
 [ext_resource type="Script" uid="uid://dfoq7j8pvqgtc" path="res://Scripts/hud.gd" id="1_sprlj"]
 [ext_resource type="FontFile" uid="uid://bfmsaoba6bqb" path="res://Assets/fonts/PixelAE-Regular.ttf" id="2_ny26j"]
 [ext_resource type="PackedScene" uid="uid://d20jo2ysdhhu2" path="res://Scenes/UI/LaptopMinigame.tscn" id="3_fdl0h"]
+[ext_resource type="PackedScene" uid="uid://bgakqw0t3ev2i" path="res://Scenes/UI/gui_dialog.tscn" id="4_8glcj"]
 
 [sub_resource type="Theme" id="Theme_fdl0h"]
 
@@ -13,9 +14,9 @@ script = ExtResource("1_sprlj")
 
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(0, 0, 0, 1)
-offset_left = 320.0
+offset_left = 314.0
 offset_top = 68.0
-offset_right = 600.0
+offset_right = 606.0
 offset_bottom = 367.0
 
 [node name="Panel2" type="ColorRect" parent="Panel"]
@@ -34,7 +35,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 7.0
 offset_top = 139.0
+offset_right = -9.0
 offset_bottom = -7.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -91,3 +94,5 @@ offset_left = 2.0
 offset_top = -55.0
 offset_right = 277.0
 offset_bottom = -21.0
+
+[node name="GUIDialog" parent="." instance=ExtResource("4_8glcj")]

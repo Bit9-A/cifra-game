@@ -7,9 +7,9 @@ extends CanvasLayer
 @onready var timer: Timer = get_node("Panel/Timer")
 @onready var attempt_label: Label = get_node_or_null("Panel/AttemptLabel") # Optional: muestra Intento X/5
 
-@export var minigame_time_limit: float = 10.0 # Tiempo para completar el minijuego
-@export var time_reward_on_success: float = 10.0
-@export var time_penalty_on_fail: float = 7.0
+@export var minigame_time_limit: float = 8.0 # Tiempo para completar el minijuego
+@export var time_reward_on_success: float = 8.0
+@export var time_penalty_on_fail: float = 4.0
 
 @export var auto_start: bool = false # Si se instancia en escena, no iniciar automáticamente a menos que sea true
 
@@ -41,6 +41,17 @@ func _ready() -> void:
 	elif guess_input and guess_input.has_signal("text_submitted"):
 		guess_input.text_submitted.connect(on_guess_text_entered)
 
+	# Preparar panel para animación de entrada: ocultarlo hasta start_minigame
+	var panel = get_node_or_null("Panel")
+	if panel:
+		panel.visible = false
+		# Asegurar valores iniciales
+		if panel is CanvasItem:
+			panel.modulate.a = 1.0
+		if panel.has_method("set_scale"):
+			# algunos controles usan rect_scale en Godot 4
+			pass
+
 func load_words_data(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file:
@@ -68,12 +79,42 @@ func start_minigame() -> void:
 		queue_free()
 		return
 
-	# Inicializar contadores y comenzar la primera palabra
+	# Inicializar contadores y preparar la primera palabra
 	randomize()
 	attempts_done = 0
 	successes = 0
 	start_next_attempt()
-	guess_input.grab_focus()
+
+	# Ejecutar animación de entrada del panel, luego habilitar input y temporizador
+	var panel = get_node_or_null("Panel")
+	if panel and panel is CanvasItem:
+		# Asegurar estado inicial
+		panel.visible = true
+		panel.modulate.a = 0.0
+		# Si es Control (Godot 4), usar rect_scale para pequeño 'pop'
+		if panel.has_method("set_rect_scale"):
+			panel.rect_scale = Vector2(0.95, 0.95)
+		elif "rect_scale" in panel:
+			panel.rect_scale = Vector2(0.95, 0.95)
+		else:
+			# como fallback, no setear escala
+			pass
+		# Deshabilitar input hasta que termine la animación
+		guess_input.editable = false
+		submit_button.disabled = true
+		var tw = create_tween()
+		tw.tween_property(panel, "modulate:a", 1.0, 0.28).from(0.0)
+		# tween scale si está disponible
+		if "rect_scale" in panel:
+			tw.tween_property(panel, "rect_scale", Vector2(1,1), 0.28).from(panel.rect_scale)
+		tw.connect("finished", Callable(self, "_on_entry_animation_finished"))
+	else:
+		# Si no hay panel, habilitar input inmediatamente
+		guess_input.grab_focus()
+		guess_input.editable = true
+		submit_button.disabled = false
+		# Iniciar temporizador ahora que está listo
+		timer.start()
 
 func start_next_attempt() -> void:
 	# Selecciona una nueva palabra, la oculta y prepara la UI para el intento
@@ -89,7 +130,10 @@ func start_next_attempt() -> void:
 		attempt_label.text = "Intento %d/%d" % [attempts_done + 1, attempts_required]
 	guess_input.editable = true
 	submit_button.disabled = false
-	timer.start()
+	# Timer is started after entry animation; if panel already shown (re-entrance), ensure timer runs
+	var panel = get_node_or_null("Panel")
+	if not panel or (panel and panel.visible and panel.modulate.a >= 1.0):
+		timer.start()
 
 func hide_word(word: String) -> String:
 	var hidden = ""
@@ -170,6 +214,17 @@ func finalize_minigame() -> void:
 	# Emitir resultado final (sin aplicar cambio de tiempo adicional, ya aplicado por attempt_result)
 	minigame_completed.emit(is_success)
 	queue_free()
+
+func _on_entry_animation_finished() -> void:
+	# Habilitar input y temporizador al finalizar la animación de entrada
+	if guess_input:
+		guess_input.editable = true
+		guess_input.grab_focus()
+	if submit_button:
+		submit_button.disabled = false
+	# Iniciar temporizador para la primera palabra
+	if timer:
+		timer.start()
 
 func on_guess_text_entered(submitted_text: String) -> void:
 	# Maneja el envío con Enter desde el LineEdit

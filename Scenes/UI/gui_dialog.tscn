@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgakqw0t3ev2i"]
+
+[ext_resource type="Script" uid="uid://bq84ms3m6tqny" path="res://Scripts/gui_dialog.gd" id="1_68ppu"]
+[ext_resource type="Script" uid="uid://g32um0mltv5d" path="res://addons/dialogue_manager/dialogue_label.gd" id="1_u31qk"]
+[ext_resource type="Texture2D" uid="uid://b862pfto7ya0p" path="res://Assets/sprites/avatars/cifra.jpg" id="3_88q1i"]
+[ext_resource type="FontFile" uid="uid://b3tw7nv8s1k8f" path="res://Assets/fonts/CyberpunkCraftpixPixel (1).otf" id="4_mnqid"]
+
+[node name="GUIDialog" type="CanvasLayer"]
+script = ExtResource("1_68ppu")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 49.0
+offset_top = 11.0
+offset_right = 598.0
+offset_bottom = 116.0
+
+[node name="DialogueLabel" type="RichTextLabel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = 36.0
+offset_right = -14.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_mnqid")
+theme_override_font_sizes/normal_font_size = 12
+script = ExtResource("1_u31qk")
+skip_pause_at_abbreviations = PackedStringArray("Mr", "Mrs", "Ms", "Dr", "etc", "eg", "ex")
+metadata/_custom_type_script = "uid://g32um0mltv5d"
+
+[node name="Avatar" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_right = 85.0
+offset_bottom = 105.0
+texture = ExtResource("3_88q1i")
+expand_mode = 1
+
+[node name="Name" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 8.0
+offset_right = 164.0
+offset_bottom = 26.0
+theme_override_fonts/font = ExtResource("4_mnqid")
+theme_override_font_sizes/font_size = 16
