@@ -21,7 +21,7 @@ signal game_over_signal()
 signal game_won_signal() # Nueva señal para indicar la victoria del juego
 
 @export var win_time_threshold: float = 120.0 # Tiempo mínimo para ganar
-@export var questions_to_win: int = 1 # Número de preguntas correctas para ganar
+@export var questions_to_win: int = 15 # Número de preguntas correctas para ganar
 var questions_answered_count: int = 0 # Contador de preguntas respondidas
 var correct_answers_count: int = 0
 var wrong_answers_count: int = 0
