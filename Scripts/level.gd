@@ -6,6 +6,7 @@ extends Node2D
 
 @onready var player: CharacterBody2D
 @onready var policia: CharacterBody2D
+@onready var cancion: AudioStreamPlayer2D = $Player/Cancion
 @onready var hud: CanvasLayer
 @onready var parallax_backgrounds: Array[ParallaxBackground] = []
 
@@ -36,11 +37,12 @@ var current_time_drain_rate: float = 1.0 # Multiplicador actual para la velocida
 var current_laptop_minigame: CanvasLayer = null # Referencia a la instancia del minijuego
 
 
+var game_started: bool = false # Nuevo flag para controlar el inicio real del juego
+var music_started: bool = false # Nuevo flag para controlar la música
+
 func _process(delta: float) -> void:
-	# Si game_over está activado, detenemos la actualización; no pausamos el árbol
-	# Ya no interrumpimos la actualización cuando hay un minijuego activo —
-	# queremos que el tiempo, la policía y los fondos sigan actualizándose.
-	if game_over:
+	# No actualizar tiempo ni música ni policía hasta que termine el diálogo inicial
+	if not game_started or game_over:
 		return
 
 	# Actualizar tiempo normalmente incluso si hay un minijuego activo
@@ -388,3 +390,51 @@ func _ready() -> void:
 		game_won_signal.connect(Callable(hud, "_on_level_game_won_signal")) # Conectar la señal de victoria
 		hud.load_random_question() # Cargar la primera pregunta al inicio del nivel
 		hud.update_score_display(questions_answered_count, questions_to_win) # Inicializar el score en el HUD
+
+		# Listen for the dialogue manager finishing the intro dialogue so we can start the game
+		var dm = Engine.get_singleton("DialogueManager")
+		if dm:
+			dm.dialogue_ended.connect(Callable(self, "_on_initial_dialogue_finished"))
+
+
+func _on_initial_dialogue_finished(resource) -> void:
+	# Called when any dialogue ends; if it's the intro resource, start the game (enable player, music, time)
+	if resource == null:
+		return
+	var path: String = ""
+	# Acceder directamente a resource_path si el recurso no es nulo
+	if resource != null:
+		path = resource.resource_path
+	else:
+		path = str(resource) # Esto debería ser "null" si resource es null, pero ya lo manejamos arriba.
+	
+	if path.find("Dialogo.dialogue") == -1:
+		return
+
+	push_warning("Level: _on_initial_dialogue_finished llamado.")
+
+	# Enable player movement now the intro ended
+	if player and player.has_method("enable_movement"):
+		player.enable_movement()
+		push_warning("Level: Movimiento del jugador habilitado.")
+
+	# Start music if not already started
+	if not music_started:
+		push_warning("Level: Intentando iniciar música.")
+		if cancion and cancion.has_method("play"):
+			cancion.play()
+			music_started = true
+			push_warning("Level: Música iniciada.")
+		else:
+			push_warning("Level: No se pudo iniciar la música. Nodo 'cancion' no encontrado o no tiene método 'play'.")
+
+	# Start game logic (time, police, etc)
+	game_started = true
+	push_warning("Level: game_started establecido a true.")
+
+	# Ensure HUD has a loaded question ready
+	if hud:
+		hud.show_game_ui() # Mostrar el HUD después del diálogo
+		hud.load_random_question()
+		hud.update_score_display(questions_answered_count, questions_to_win)
+		push_warning("Level: HUD mostrado y preguntas cargadas.")

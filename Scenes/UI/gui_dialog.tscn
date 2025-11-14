@@ -9,10 +9,20 @@
 script = ExtResource("1_68ppu")
 
 [node name="Panel" type="Panel" parent="."]
+self_modulate = Color(0, 0, 0, 0.9019608)
 offset_left = 49.0
 offset_top = 11.0
 offset_right = 598.0
 offset_bottom = 116.0
+
+[node name="TextureRect" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.627451)
 
 [node name="DialogueLabel" type="RichTextLabel" parent="Panel"]
 layout_mode = 1

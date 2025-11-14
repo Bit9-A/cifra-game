@@ -16,6 +16,7 @@ signal request_current_question()
 signal question_loaded()
 
 func _ready() -> void:
+	
 	# Inicializar botones de respuesta
 	if answer_buttons_container:
 		for child in answer_buttons_container.get_children():
@@ -152,6 +153,8 @@ func hide_game_ui(fade: bool = true) -> void:
 		question_label.visible = false
 	for b in answer_buttons:
 		b.visible = false
+	if time_label:
+		time_label.visible = false
 
 func _on_panel2_hidden_finished() -> void:
 	var panel2 = get_node_or_null("Panel/Panel2")
@@ -171,3 +174,5 @@ func show_game_ui(fade: bool = true) -> void:
 		question_label.visible = true
 	for b in answer_buttons:
 		b.visible = true
+	if time_label:
+		time_label.visible = true

@@ -13,7 +13,7 @@ script = ExtResource("1_sprlj")
 [node name="LaptopMinigame" parent="." instance=ExtResource("3_fdl0h")]
 
 [node name="Panel" type="Panel" parent="."]
-self_modulate = Color(0, 0, 0, 1)
+self_modulate = Color(0, 0, 0, 0)
 offset_left = 314.0
 offset_top = 68.0
 offset_right = 606.0

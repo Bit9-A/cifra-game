@@ -73,6 +73,17 @@ func _ready() -> void:
 	if auto_start_dialogue and FileAccess.file_exists("res://Data/Dialogo.dialogue"):
 		var dlg_res = load("res://Data/Dialogo.dialogue")
 		if dlg_res:
+			# Before starting an intro dialogue, hide the main gameplay UI (if parent HUD provides it)
+			var parent_hud = get_parent()
+			if parent_hud and parent_hud.has_method("hide_game_ui"):
+				# Don't animate the hide; we want it hidden immediately for the intro
+				parent_hud.hide_game_ui(false)
+			# Also attempt to disable player movement while the intro runs (if player provides the API)
+			var cur_scene = get_tree().get_current_scene()
+			if cur_scene:
+				var p = cur_scene.get_node_or_null("Player")
+				if p and p.has_method("disable_movement"):
+					p.disable_movement()
 			# Use empty title to start at the resource's configured first title
 			self.start(dlg_res, "")
 
