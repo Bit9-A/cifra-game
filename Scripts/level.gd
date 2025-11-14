@@ -21,7 +21,7 @@ signal game_over_signal()
 signal game_won_signal() # Nueva señal para indicar la victoria del juego
 
 @export var win_time_threshold: float = 120.0 # Tiempo mínimo para ganar
-@export var questions_to_win: int = 15 # Número de preguntas correctas para ganar
+@export var questions_to_win: int = 1 # Número de preguntas correctas para ganar
 var questions_answered_count: int = 0 # Contador de preguntas respondidas
 var correct_answers_count: int = 0
 var wrong_answers_count: int = 0
@@ -201,8 +201,8 @@ func on_laptop_minigame_completed(is_success: bool) -> void:
 	check_win_condition() # Volver a verificar la condición de victoria después del minijuego
 
 func check_win_condition() -> void:
-	# Victory if the player answered the required number of questions
-	if not game_over and questions_answered_count >= questions_to_win:
+	# Victory if the player answered the required number of questions OR survived for enough time
+	if not game_over and (questions_answered_count >= questions_to_win or time_left >= win_time_threshold):
 		Global.last_questions_answered = questions_answered_count
 		Global.last_correct_answers = correct_answers_count
 		Global.last_wrong_answers = wrong_answers_count
@@ -210,7 +210,7 @@ func check_win_condition() -> void:
 		game_won_signal.emit()
 		save_score()
 		set_game_over(true) # Pausar el juego y mostrar mensaje de victoria
-		show_results_screen()
+		# show_results_screen() # Esta función crea una UI dinámica, pero el usuario quiere ir a WinScreen.tscn
 		get_tree().change_scene_to_file("res://Scenes/UI/WinScreen.tscn")# Mostrar pantalla de resultados con estadísticas
 		
 
@@ -395,7 +395,6 @@ func _ready() -> void:
 		var dm = Engine.get_singleton("DialogueManager")
 		if dm:
 			dm.dialogue_ended.connect(Callable(self, "_on_initial_dialogue_finished"))
-
 
 func _on_initial_dialogue_finished(resource) -> void:
 	# Called when any dialogue ends; if it's the intro resource, start the game (enable player, music, time)

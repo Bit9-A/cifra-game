@@ -34,7 +34,7 @@ func _ready() -> void:
 	# start_minigame se llamará explícitamente cuando se active el minijuego desde Level
 	if auto_start:
 		start_minigame()
-
+	
 	# Permitir enviar la respuesta con Enter (conectar la señal disponible según la versión de Godot)
 	if guess_input and guess_input.has_signal("text_entered"):
 		guess_input.text_entered.connect(on_guess_text_entered)
